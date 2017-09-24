@@ -32,7 +32,7 @@ fastify.listen(3000, (err) => {
 
   http.get('http://127.0.0.1:3000/', (res) => {
     console.log(res.headers['cache-control'])
-    console.log(res.headers['last-modified])
+    console.log(res.headers['last-modified'])
   })
 })
 ```
