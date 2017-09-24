@@ -11,7 +11,7 @@ contexts.
 ## Example
 
 ```js
-const http
+const http = require('http')
 const fastify = require('fastify')
 const fastifyCaching = require('fastify-caching')
 
