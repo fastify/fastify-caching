@@ -1,0 +1,40 @@
+{
+  "name": "fastify-caching",
+  "version": "1.0.0",
+  "description": "A plugin for Fastify to enable management of cache control headers",
+  "main": "plugin.js",
+  "scripts": {
+    "test": "tap 'test/**/*.test.js'",
+    "lint": "standard | snazzy"
+  },
+  "precommit": [
+    "lint",
+    "test"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/fastify/fastify-caching.git"
+  },
+  "keywords": [
+    "fastify",
+    "cache",
+    "caching"
+  ],
+  "author": "James Sumners <james.sumners@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fastify/fastify-caching/issues"
+  },
+  "homepage": "https://github.com/fastify/fastify-caching#readme",
+  "devDependencies": {
+    "abstract-logging": "^1.0.0",
+    "fastify": "^0.27.0",
+    "pre-commit": "^1.2.2",
+    "snazzy": "^7.0.0",
+    "standard": "^10.0.3",
+    "tap": "^10.7.2"
+  },
+  "dependencies": {
+    "fastify-plugin": "^0.1.1"
+  }
+}
