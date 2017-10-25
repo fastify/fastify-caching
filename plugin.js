@@ -3,7 +3,8 @@
 const fp = require('fastify-plugin')
 const defaultOptions = {
   expiresIn: undefined,
-  privacy: undefined
+  privacy: undefined,
+  cache: require('@jsumners/memcache')()
 }
 
 function plugin (instance, options, next) {
@@ -38,6 +39,8 @@ function plugin (instance, options, next) {
     this.header('ETag', value)
     return this
   })
+
+  instance.decorate('cache', _options.cache)
 
   next()
 }
