@@ -27,7 +27,6 @@
   },
   "homepage": "https://github.com/fastify/fastify-caching#readme",
   "devDependencies": {
-    "abstract-logging": "^1.0.0",
     "fastify": "^0.30.2",
     "pre-commit": "^1.2.2",
     "snazzy": "^7.0.0",

@@ -3,14 +3,11 @@
 const http = require('http')
 const test = require('tap').test
 const plugin = require('../plugin')
-
-const log = require('abstract-logging')
-log.child = () => log
 const fastify = require('fastify')
 
 test('decorators get added', (t) => {
   t.plan(2)
-  const instance = fastify({logger: log})
+  const instance = fastify()
   instance.register(plugin, (err) => {
     if (err) t.threw(err)
   })
@@ -32,7 +29,7 @@ test('decorators add headers', (t) => {
   t.plan(4)
   const now = new Date()
   const tag = '123456'
-  const instance = fastify({logger: log})
+  const instance = fastify()
   instance.register(plugin, (err) => {
     if (err) t.threw(err)
   })
@@ -58,7 +55,7 @@ test('decorators add headers', (t) => {
 
 test('sets no-cache header', (t) => {
   t.plan(2)
-  const instance = fastify({logger: log})
+  const instance = fastify()
   instance.register(plugin, {privacy: plugin.privacy.NOCACHE}, (err) => {
     if (err) t.threw(err)
   })
@@ -80,7 +77,7 @@ test('sets no-cache header', (t) => {
 
 test('sets private with max-age header', (t) => {
   t.plan(2)
-  const instance = fastify({logger: log})
+  const instance = fastify()
   const opts = {
     privacy: plugin.privacy.PRIVATE,
     expiresIn: 300
@@ -106,7 +103,7 @@ test('sets private with max-age header', (t) => {
 
 test('sets no-store with max-age header', (t) => {
   t.plan(2)
-  const instance = fastify({logger: log})
+  const instance = fastify()
   instance.register(plugin, {privacy: 'no-store', expiresIn: 300}, (err) => {
     if (err) t.threw(err)
   })
