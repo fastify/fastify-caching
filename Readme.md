@@ -9,7 +9,13 @@ should have differing cache settings should be registered withing different
 contexts.
 
 In addition to providing header manipulation, the plugin also decorates the
-server instance with an object that can be used for caching items.
+server instance with an object that can be used for caching items. **Note:**
+the default cache should not be used in a "production" environment. It is
+an LRU, in-memory, cache that is capped at 100,000 items. It is *highly*
+recommended that a full featured cache object be supplied, e.g.
+[catbox-redis][catbox-redis].
+
+[catbox-redis]: https://www.npmjs.com/package/catbox-redis
 
 ## Example
 

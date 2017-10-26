@@ -34,7 +34,7 @@
     "tap": "^10.7.2"
   },
   "dependencies": {
-    "@jsumners/memcache": "^1.0.1",
+    "@jsumners/memcache": "^2.0.0",
     "fastify-plugin": "^0.1.1"
   }
 }
