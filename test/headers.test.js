@@ -96,7 +96,7 @@ test('sets private with max-age header', (t) => {
 
     http.get(address, (res) => {
       t.ok(res.headers['cache-control'])
-      t.is(res.headers['cache-control'], 'private; max-age=300')
+      t.is(res.headers['cache-control'], 'private, max-age=300')
     }).on('error', (err) => t.threw(err))
   })
 })
@@ -118,7 +118,7 @@ test('sets no-store with max-age header', (t) => {
 
     http.get(address, (res) => {
       t.ok(res.headers['cache-control'])
-      t.is(res.headers['cache-control'], 'no-store; max-age=300')
+      t.is(res.headers['cache-control'], 'no-store, max-age=300')
     }).on('error', (err) => t.threw(err))
   })
 })
