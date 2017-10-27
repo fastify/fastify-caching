@@ -34,6 +34,12 @@ function plugin (instance, options, next) {
     return this
   })
 
+  instance.decorateReply('expires', function (date) {
+    if (!date) return this
+    this.header('Expires', (Date.prototype.isPrototypeOf(date)) ? date.toUTCString() : date)
+    return this
+  })
+
   instance.decorate('cache', _options.cache)
 
   next()

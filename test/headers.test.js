@@ -117,3 +117,28 @@ test('sets no-store with max-age header', (t) => {
     }).on('error', (err) => t.threw(err))
   })
 })
+
+test('sets the expires header', (t) => {
+  t.plan(2)
+  const now = new Date()
+  const instance = fastify()
+  instance.register(plugin, {privacy: plugin.privacy.NOCACHE}, (err) => {
+    if (err) t.threw(err)
+  })
+  instance.get('/', (req, reply) => {
+    reply
+      .expires(now)
+      .send({hello: 'world'})
+  })
+  instance.listen(0, (err) => {
+    if (err) t.threw(err)
+    instance.server.unref()
+    const portNum = instance.server.address().port
+    const address = `http://127.0.0.1:${portNum}`
+
+    http.get(address, (res) => {
+      t.ok(res.headers['expires'])
+      t.is(res.headers['expires'], now.toUTCString())
+    }).on('error', (err) => t.threw(err))
+  })
+})

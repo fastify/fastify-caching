@@ -88,7 +88,7 @@ fastify.listen(3000, (err) => {
 for a *cache-response-directive* as defined by RFC 2616.
 + `expiresIn` (Default: `undefined`): a value, in seconds, for the *max-age* the
 resource may be cached. When this is set, and `privacy` is not set to `no-cache`,
-then `'; max-age=<value>'` will be appended to the `cache-control` header.
+then `', max-age=<value>'` will be appended to the `cache-control` header.
 + `cache` (Default: instance of [@jsumners/memcache][jsmemcache]): a
 [Catbox (v7)][catbox] protocol compliant cache object.
 
@@ -99,6 +99,14 @@ then `'; max-age=<value>'` will be appended to the `cache-control` header.
 
 This method allows setting of the `etag` header. It accepts any arbitrary
 string. Be sure to supply a string that is valid for HTTP headers.
+
+### `reply.expires(date)`
+
+This method allows setting of the `expires` header. It accepts a regular `Date`
+object, or a string that is a valid date string according to
+[RFC 2616 §14.21][sec14.21].
+
+[sec14.21]: https://tools.ietf.org/html/rfc2616#section-14.21
 
 ## License
 
