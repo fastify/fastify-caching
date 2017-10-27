@@ -28,12 +28,6 @@ function plugin (instance, options, next) {
     })
   }
 
-  instance.decorateReply('lastModified', function (date) {
-    if (!date) return this
-    this.header('Last-Modified', (Date.prototype.isPrototypeOf(date)) ? date.toUTCString() : date)
-    return this
-  })
-
   // TODO: handle 'If-None-Match' header in request with server caching.
   instance.decorateReply('etag', function (value) {
     this.header('ETag', value)

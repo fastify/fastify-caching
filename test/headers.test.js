@@ -6,13 +6,12 @@ const plugin = require('../plugin')
 const fastify = require('fastify')
 
 test('decorators get added', (t) => {
-  t.plan(2)
+  t.plan(1)
   const instance = fastify()
   instance.register(plugin, (err) => {
     if (err) t.threw(err)
   })
   instance.get('/', (req, reply) => {
-    t.ok(reply.lastModified)
     t.ok(reply.etag)
     reply.send()
   })
@@ -26,8 +25,7 @@ test('decorators get added', (t) => {
 })
 
 test('decorators add headers', (t) => {
-  t.plan(4)
-  const now = new Date()
+  t.plan(2)
   const tag = '123456'
   const instance = fastify()
   instance.register(plugin, (err) => {
@@ -35,7 +33,6 @@ test('decorators add headers', (t) => {
   })
   instance.get('/', (req, reply) => {
     reply
-      .lastModified(now)
       .etag(tag)
       .send()
   })
@@ -45,8 +42,6 @@ test('decorators add headers', (t) => {
     const portNum = instance.server.address().port
     const address = `http://127.0.0.1:${portNum}`
     http.get(address, (res) => {
-      t.ok(res.headers['last-modified'])
-      t.is(res.headers['last-modified'], now.toUTCString())
       t.ok(res.headers['etag'])
       t.is(res.headers['etag'], tag)
     }).on('error', (err) => t.threw(err))

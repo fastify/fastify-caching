@@ -5,7 +5,7 @@ that provides mechanisms for manipulating HTTP cache headers according to
 [RFC 2616 §14.9](https://tools.ietf.org/html/rfc2616#section-14.9).
 
 This plugin fully supports Fastify's encapsulation. Therefore, routes that
-should have differing cache settings should be registered withing different
+should have differing cache settings should be registered within different
 contexts.
 
 In addition to providing header manipulation, the plugin also decorates the
@@ -34,9 +34,7 @@ fastify.register(
 )
 
 fastify.get('/', (req, reply) => {
-  reply
-    .lastModified(new Date())
-    .send({hello: 'world'})
+  reply.send({hello: 'world'})
 })
 
 fastify.listen(3000, (err) => {
@@ -44,7 +42,6 @@ fastify.listen(3000, (err) => {
 
   http.get('http://127.0.0.1:3000/', (res) => {
     console.log(res.headers['cache-control'])
-    console.log(res.headers['last-modified'])
   })
 })
 ```
@@ -97,11 +94,6 @@ then `'; max-age=<value>'` will be appended to the `cache-control` header.
 
 [jsmemcache]: https://www.npmjs.com/package/@jsumners/memcache
 [catbox]: https://github.com/hapijs/catbox/tree/v7.1.5
-
-### `reply.lastModified(date)`
-
-This method allows setting of the `last-modified` header. It accepts a regular
-`Date` object, or a string that is a valid date string according to the RFC.
 
 ### `reply.etag(string)`
 
