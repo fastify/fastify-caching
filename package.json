@@ -5,7 +5,9 @@
   "main": "plugin.js",
   "scripts": {
     "test": "tap 'test/**/*.test.js'",
-    "lint": "standard | snazzy"
+    "test-ci": "tap --cov 'test/**/*.test.js'",
+    "lint": "standard | snazzy",
+    "lint-ci": "standard"
   },
   "precommit": [
     "lint",
