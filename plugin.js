@@ -72,7 +72,7 @@ function plugin (instance, options, next) {
   next()
 }
 
-module.exports = fp(plugin, '>=0.32.0')
+module.exports = fp(plugin, '>=0.33.0')
 
 module.exports.privacy = {
   NOCACHE: 'no-cache',
