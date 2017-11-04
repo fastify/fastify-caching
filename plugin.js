@@ -1,6 +1,7 @@
 'use strict'
 
 const fp = require('fastify-plugin')
+const uidSafe = require('uid-safe')
 const defaultOptions = {
   expiresIn: undefined,
   privacy: undefined,
@@ -15,6 +16,8 @@ function plugin (instance, options, next) {
     _options = Object.assign({}, defaultOptions, options)
   }
 
+  if (!_options.cache) _options.cache = defaultOptions.cache
+
   if (_options.privacy) {
     // https://tools.ietf.org/html/rfc2616#section-14.9.4
     let value = _options.privacy
@@ -28,9 +31,13 @@ function plugin (instance, options, next) {
     })
   }
 
-  // TODO: handle 'If-None-Match' header in request with server caching.
-  instance.decorateReply('etag', function (value) {
-    this.header('ETag', value)
+  instance.decorateReply('etag', function (value, lifetime) {
+    if (value) {
+      this.header('ETag', value)
+    } else {
+      this.header('ETag', uidSafe.sync(18))
+    }
+    this.res._etagLife = Number.isInteger(lifetime) ? lifetime : 3600000
     return this
   })
 
@@ -42,10 +49,30 @@ function plugin (instance, options, next) {
 
   instance.decorate('cache', _options.cache)
 
+  instance.decorate('etagMaxLife', _options.etagMaxLife)
+
+  instance.addHook('onRequest', function (req, res, next) {
+    if (!req.headers['if-none-match']) return next()
+    const etag = req.headers['if-none-match']
+    this.cache.get(etag, (err, cached) => {
+      if (err) return next(err)
+      if (cached && cached.item) {
+        res.statusCode = 304
+        return res.end()
+      }
+      next()
+    })
+  })
+
+  instance.addHook('onResponse', function (res, next) {
+    if (!res.hasHeader('etag') || !res._etagLife) return next()
+    this.cache.set(res.getHeader('etag'), true, res._etagLife, next)
+  })
+
   next()
 }
 
-module.exports = fp(plugin, '>=0.15.0')
+module.exports = fp(plugin, '>=0.32.0')
 
 module.exports.privacy = {
   NOCACHE: 'no-cache',

@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/fastify/fastify-caching#readme",
   "devDependencies": {
-    "fastify": "^0.30.2",
+    "fastify": "^0.33.0",
     "pre-commit": "^1.2.2",
     "snazzy": "^7.0.0",
     "standard": "^10.0.3",
@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "@jsumners/memcache": "^2.0.0",
-    "fastify-plugin": "^0.1.1"
+    "fastify-plugin": "^0.1.1",
+    "uid-safe": "^2.1.5"
   }
 }

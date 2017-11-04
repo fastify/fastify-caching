@@ -53,3 +53,81 @@ test('cache is usable', (t) => {
       .on('error', t.threw)
   })
 })
+
+test('etags get stored in cache', (t) => {
+  t.plan(1)
+  const instance = fastify()
+  instance.register(plugin, (err) => {
+    if (err) t.threw(err)
+  })
+
+  instance.get('/one', (req, reply) => {
+    reply
+      .etag('123456')
+      .send({hello: 'world'})
+  })
+
+  instance.listen(0, (err) => {
+    if (err) t.threw(err)
+    instance.server.unref()
+    const portNum = instance.server.address().port
+    const address = `http://127.0.0.1:${portNum}/one`
+    http
+      .get(address, (res) => {
+        const opts = {
+          host: '127.0.0.1',
+          port: portNum,
+          path: '/one',
+          headers: {
+            'if-none-match': '123456'
+          }
+        }
+        http
+          .get(opts, (res) => {
+            t.is(res.statusCode, 304)
+          })
+          .on('error', t.threw)
+      })
+      .on('error', t.threw)
+  })
+})
+
+test('etag cache life is customizable', (t) => {
+  t.plan(1)
+  const instance = fastify()
+  instance.register(plugin, (err) => {
+    if (err) t.threw(err)
+  })
+
+  instance.get('/one', function (req, reply) {
+    reply
+      .etag('123456', 50)
+      .send({hello: 'world'})
+  })
+
+  instance.listen(0, (err) => {
+    if (err) t.threw(err)
+    instance.server.unref()
+    const portNum = instance.server.address().port
+    const address = `http://127.0.0.1:${portNum}/one`
+    http
+      .get(address, (res) => {
+        const opts = {
+          host: '127.0.0.1',
+          port: portNum,
+          path: '/one',
+          headers: {
+            'if-none-match': '123456'
+          }
+        }
+        setTimeout(() => {
+          http
+            .get(opts, (res) => {
+              t.is(res.statusCode, 200)
+            })
+            .on('error', t.threw)
+        }, 150)
+      })
+      .on('error', t.threw)
+  })
+})

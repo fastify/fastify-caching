@@ -90,15 +90,35 @@ for a *cache-response-directive* as defined by RFC 2616.
 resource may be cached. When this is set, and `privacy` is not set to `no-cache`,
 then `', max-age=<value>'` will be appended to the `cache-control` header.
 + `cache` (Default: instance of [@jsumners/memcache][jsmemcache]): a
-[Catbox (v7)][catbox] protocol compliant cache object.
+[Catbox (v7)][catbox] protocol compliant cache object. Note: the plugin
+requires a cache instance to properly support the ETag mechanism. Therefore,
+if a falsy value is supplied the default will be used.
 
 [jsmemcache]: https://www.npmjs.com/package/@jsumners/memcache
 [catbox]: https://github.com/hapijs/catbox/tree/v7.1.5
 
-### `reply.etag(string)`
+### `reply.etag(string, number)`
 
 This method allows setting of the `etag` header. It accepts any arbitrary
 string. Be sure to supply a string that is valid for HTTP headers.
+
+If a tag string is not supplied then [uid-safe][uid-safe] will be used to
+generate a tag. This operation will be performed ***synchronously***. It is
+recommended to always supply a value to this method to avoid this operation.
+
+All incoming requests to paths affected by this plugin will be inspected for
+the `if-none-match` header. If the header is present, the value will be used
+to lookup the tag within the cache associated with this plugin. If the tag is
+found, then the response will be ended with a 304 status code sent to
+the client.
+
+Tags will be cached according to the second parameter. If the second parameter
+is supplied, and it is an integer, then it will be used as the time to cache
+the etag for generating 304 responses. The time must be specified in
+milliseconds. The default lifetime, when the parameter is not specified, is
+`3600000`.
+
+[uid-safe]: https://www.npmjs.com/package/uid-safe
 
 ### `reply.expires(date)`
 
