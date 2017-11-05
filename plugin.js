@@ -37,7 +37,7 @@ function plugin (instance, options, next) {
     } else {
       this.header('ETag', uidSafe.sync(18))
     }
-    this.res._etagLife = Number.isInteger(lifetime) ? lifetime : 3600000
+    this._etagLife = Number.isInteger(lifetime) ? lifetime : 3600000
     return this
   })
 
@@ -64,9 +64,10 @@ function plugin (instance, options, next) {
     })
   })
 
-  instance.addHook('onResponse', function (res, next) {
-    if (!res.hasHeader('etag') || !res._etagLife) return next()
-    this.cache.set(res.getHeader('etag'), true, res._etagLife, next)
+  instance.addHook('onSend', function (fastifyRequest, fastifyReply, payload, next) {
+    const etag = fastifyReply.res.getHeader('etag')
+    if (!etag || !fastifyReply._etagLife) return next()
+    this.cache.set(etag, true, fastifyReply._etagLife, next)
   })
 
   next()
