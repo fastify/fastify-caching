@@ -8,7 +8,42 @@ const defaultOptions = {
   cache: require('@jsumners/memcache')()
 }
 
-function plugin (instance, options, next) {
+function cachingExpires (date) {
+  if (!date) return this
+  this.header('Expires', (Date.prototype.isPrototypeOf(date)) ? date.toUTCString() : date)
+  return this
+}
+
+function etag (value, lifetime) {
+  if (value) {
+    this.header('ETag', value)
+  } else {
+    this.header('ETag', uidSafe.sync(18))
+  }
+  this._etagLife = Number.isInteger(lifetime) ? lifetime : 3600000
+  return this
+}
+
+function etagHandleRequest (req, res, next) {
+  if (!req.headers['if-none-match']) return next()
+  const etag = req.headers['if-none-match']
+  this.cache.get(etag, (err, cached) => {
+    if (err) return next(err)
+    if (cached && cached.item) {
+      res.statusCode = 304
+      return res.end()
+    }
+    next()
+  })
+}
+
+function etagOnSend (fastifyRequest, fastifyReply, payload, next) {
+  const etag = fastifyReply.res.getHeader('etag')
+  if (!etag || !fastifyReply._etagLife) return next()
+  this.cache.set(etag, true, fastifyReply._etagLife, next)
+}
+
+function fastifyCachingPlugin (instance, options, next) {
   let _options
   if (Function.prototype.isPrototypeOf(options)) {
     _options = Object.assign({}, defaultOptions)
@@ -31,49 +66,17 @@ function plugin (instance, options, next) {
     })
   }
 
-  instance.decorateReply('etag', function (value, lifetime) {
-    if (value) {
-      this.header('ETag', value)
-    } else {
-      this.header('ETag', uidSafe.sync(18))
-    }
-    this._etagLife = Number.isInteger(lifetime) ? lifetime : 3600000
-    return this
-  })
-
-  instance.decorateReply('expires', function (date) {
-    if (!date) return this
-    this.header('Expires', (Date.prototype.isPrototypeOf(date)) ? date.toUTCString() : date)
-    return this
-  })
-
   instance.decorate('cache', _options.cache)
-
   instance.decorate('etagMaxLife', _options.etagMaxLife)
-
-  instance.addHook('onRequest', function (req, res, next) {
-    if (!req.headers['if-none-match']) return next()
-    const etag = req.headers['if-none-match']
-    this.cache.get(etag, (err, cached) => {
-      if (err) return next(err)
-      if (cached && cached.item) {
-        res.statusCode = 304
-        return res.end()
-      }
-      next()
-    })
-  })
-
-  instance.addHook('onSend', function (fastifyRequest, fastifyReply, payload, next) {
-    const etag = fastifyReply.res.getHeader('etag')
-    if (!etag || !fastifyReply._etagLife) return next()
-    this.cache.set(etag, true, fastifyReply._etagLife, next)
-  })
+  instance.decorateReply('etag', etag)
+  instance.decorateReply('expires', cachingExpires)
+  instance.addHook('onRequest', etagHandleRequest)
+  instance.addHook('onSend', etagOnSend)
 
   next()
 }
 
-module.exports = fp(plugin, '>=0.33.0')
+module.exports = fp(fastifyCachingPlugin, '>=0.33.0')
 
 module.exports.privacy = {
   NOCACHE: 'no-cache',
