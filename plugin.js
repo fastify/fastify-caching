@@ -5,7 +5,8 @@ const uidSafe = require('uid-safe')
 const defaultOptions = {
   expiresIn: undefined,
   privacy: undefined,
-  cache: require('@jsumners/memcache')()
+  cache: require('@jsumners/memcache')('fastify-caching'),
+  cacheSegment: 'fastify-caching'
 }
 
 function cachingExpires (date) {
@@ -27,7 +28,7 @@ function etag (value, lifetime) {
 function etagHandleRequest (req, res, next) {
   if (!req.headers['if-none-match']) return next()
   const etag = req.headers['if-none-match']
-  this.cache.get(etag, (err, cached) => {
+  this.cache.get({id: etag, segment: this.cacheSegment}, (err, cached) => {
     if (err) return next(err)
     if (cached && cached.item) {
       res.statusCode = 304
@@ -40,7 +41,12 @@ function etagHandleRequest (req, res, next) {
 function etagOnSend (fastifyRequest, fastifyReply, payload, next) {
   const etag = fastifyReply.res.getHeader('etag')
   if (!etag || !fastifyReply._etagLife) return next()
-  this.cache.set(etag, true, fastifyReply._etagLife, next)
+  this.cache.set(
+    {id: etag, segment: this.cacheSegment},
+    true,
+    fastifyReply._etagLife,
+    next
+  )
 }
 
 function fastifyCachingPlugin (instance, options, next) {
@@ -67,6 +73,7 @@ function fastifyCachingPlugin (instance, options, next) {
   }
 
   instance.decorate('cache', _options.cache)
+  instance.decorate('cacheSegment', _options.cacheSegment)
   instance.decorate('etagMaxLife', _options.etagMaxLife)
   instance.decorateReply('etag', etag)
   instance.decorateReply('expires', cachingExpires)

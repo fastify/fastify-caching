@@ -80,7 +80,8 @@ fastify.listen(3000, (err) => {
 {
   privacy: 'value',
   expiresIn: 300,
-  cache: {get, set}
+  cache: {get, set},
+  cacheSegment: 'segment-name'
 }
 ```
 
@@ -93,6 +94,8 @@ then `', max-age=<value>'` will be appended to the `cache-control` header.
 [Catbox (v7)][catbox] protocol compliant cache object. Note: the plugin
 requires a cache instance to properly support the ETag mechanism. Therefore,
 if a falsy value is supplied the default will be used.
++ `cacheSegment` (Default: `'fastify-caching'`): segment identifier to use when
+communicating with the supplied Catbox cache.
 
 [jsmemcache]: https://www.npmjs.com/package/@jsumners/memcache
 [catbox]: https://github.com/hapijs/catbox/tree/v7.1.5
