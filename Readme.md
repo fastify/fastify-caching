@@ -11,11 +11,11 @@ contexts.
 In addition to providing header manipulation, the plugin also decorates the
 server instance with an object that can be used for caching items. **Note:**
 the default cache should not be used in a "production" environment. It is
-an LRU, in-memory, cache that is capped at 100,000 items. It is *highly*
+an LRU, in-memory cache that is capped at 100,000 items. It is *highly*
 recommended that a full featured cache object be supplied, e.g.
-[catbox-redis][catbox-redis].
+[abstract-cache-redis][acache-redis].
 
-[catbox-redis]: https://www.npmjs.com/package/catbox-redis
+[acache-redis]: https://www.npmjs.com/package/abstract-cache-redis
 
 ## Example
 
@@ -48,15 +48,23 @@ fastify.listen(3000, (err) => {
 
 This example shows how to register the plugin such that it only provides
 a server-local cache. It will not set any cache control headers on responses.
+It also shows how to retain a reference to the cache object so that it can
+be re-used.
 
 ```js
-const fastify = require('fastify')
-const fastifyCaching = require('fastify-caching')
+const redis = require('ioredis')({host: '127.0.0.1'})
+const abcache = require('abstract-cache')({
+  useAwait: false,
+  driver: {
+    name: 'abstract-cache-redis', // must be installed via `npm install`
+    options: {client: redis}
+  }
+})
 
-fastify.register(
-  fastifyCaching,
-  (err) => { if (err) throw err }
-)
+const fastify = require('fastify')()
+fastify
+  .register(require('fastify-redis'), {client: redis})
+  .register(require('fastify-caching'), {cache: abcache})
 
 fastify.get('/', (req, reply) => {
   fastify.cache.set('hello', {hello: 'world'}, 10000, (err) => {
@@ -90,15 +98,14 @@ for a *cache-response-directive* as defined by RFC 2616.
 + `expiresIn` (Default: `undefined`): a value, in seconds, for the *max-age* the
 resource may be cached. When this is set, and `privacy` is not set to `no-cache`,
 then `', max-age=<value>'` will be appended to the `cache-control` header.
-+ `cache` (Default: instance of [@jsumners/memcache][jsmemcache]): a
-[Catbox (v7)][catbox] protocol compliant cache object. Note: the plugin
-requires a cache instance to properly support the ETag mechanism. Therefore,
-if a falsy value is supplied the default will be used.
++ `cache` (Default: `abstract-cache.memclient`): an [abstract-cache][acache]
+protocol compliant cache object. Note: the plugin requires a cache instance to
+properly support the ETag mechanism. Therefore, if a falsy value is supplied
+the default will be used.
 + `cacheSegment` (Default: `'fastify-caching'`): segment identifier to use when
-communicating with the supplied Catbox cache.
+communicating with the cache.
 
-[jsmemcache]: https://www.npmjs.com/package/@jsumners/memcache
-[catbox]: https://github.com/hapijs/catbox/tree/v7.1.5
+[acache]: https://www.npmjs.com/package/abstract-cache
 
 ### `reply.etag(string, number)`
 
