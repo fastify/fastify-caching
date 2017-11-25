@@ -5,7 +5,7 @@ const uidSafe = require('uid-safe')
 const defaultOptions = {
   expiresIn: undefined,
   privacy: undefined,
-  cache: require('@jsumners/memcache')('fastify-caching'),
+  cache: require('abstract-cache')(),
   cacheSegment: 'fastify-caching'
 }
 
