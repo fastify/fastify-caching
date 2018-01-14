@@ -9,20 +9,18 @@ const fastify = require('fastify')
 test('cache property gets added to instance', (t) => {
   t.plan(2)
   const instance = fastify()
-  instance.register(plugin, (err) => {
-    if (err) t.threw(err)
-
-    t.ok(instance.cache)
-    t.ok(instance.cache.set)
-  })
+  instance
+    .register(plugin)
+    .ready(() => {
+      t.ok(instance.cache)
+      t.ok(instance.cache.set)
+    })
 })
 
 test('cache is usable', (t) => {
   t.plan(1)
   const instance = fastify()
-  instance.register(plugin, (err) => {
-    if (err) t.threw(err)
-  })
+  instance.register(plugin)
 
   instance.get('/one', (req, reply) => {
     instance.cache.set('one', {one: true}, 100, (err) => {
@@ -57,9 +55,7 @@ test('cache is usable', (t) => {
 test('etags get stored in cache', (t) => {
   t.plan(1)
   const instance = fastify()
-  instance.register(plugin, (err) => {
-    if (err) t.threw(err)
-  })
+  instance.register(plugin)
 
   instance.get('/one', (req, reply) => {
     reply
@@ -95,9 +91,7 @@ test('etags get stored in cache', (t) => {
 test('etag cache life is customizable', (t) => {
   t.plan(1)
   const instance = fastify()
-  instance.register(plugin, (err) => {
-    if (err) t.threw(err)
-  })
+  instance.register(plugin)
 
   instance.get('/one', function (req, reply) {
     reply

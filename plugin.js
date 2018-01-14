@@ -83,7 +83,10 @@ function fastifyCachingPlugin (instance, options, next) {
   next()
 }
 
-module.exports = fp(fastifyCachingPlugin, '>=0.33.0')
+module.exports = fp(fastifyCachingPlugin, {
+  fastify: '>=0.39.1',
+  name: 'fastify-caching'
+})
 
 module.exports.privacy = {
   NOCACHE: 'no-cache',
