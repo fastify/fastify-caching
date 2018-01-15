@@ -29,15 +29,15 @@
   },
   "homepage": "https://github.com/fastify/fastify-caching#readme",
   "devDependencies": {
-    "fastify": "^0.35.2",
+    "fastify": "^0.39.1",
     "pre-commit": "^1.2.2",
     "snazzy": "^7.0.0",
     "standard": "^10.0.3",
-    "tap": "^10.7.3"
+    "tap": "^11.0.1"
   },
   "dependencies": {
     "abstract-cache": "^1.0.0",
-    "fastify-plugin": "^0.1.1",
+    "fastify-plugin": "^0.2.1",
     "uid-safe": "^2.1.5"
   }
 }

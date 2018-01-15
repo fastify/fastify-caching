@@ -8,9 +8,7 @@ const fastify = require('fastify')
 test('decorators get added', (t) => {
   t.plan(1)
   const instance = fastify()
-  instance.register(plugin, (err) => {
-    if (err) t.threw(err)
-  })
+  instance.register(plugin)
   instance.get('/', (req, reply) => {
     t.ok(reply.etag)
     reply.send()
@@ -28,9 +26,7 @@ test('decorators add headers', (t) => {
   t.plan(2)
   const tag = '123456'
   const instance = fastify()
-  instance.register(plugin, (err) => {
-    if (err) t.threw(err)
-  })
+  instance.register(plugin)
   instance.get('/', (req, reply) => {
     reply
       .etag(tag)
@@ -51,9 +47,7 @@ test('decorators add headers', (t) => {
 test('sets no-cache header', (t) => {
   t.plan(2)
   const instance = fastify()
-  instance.register(plugin, {privacy: plugin.privacy.NOCACHE}, (err) => {
-    if (err) t.threw(err)
-  })
+  instance.register(plugin, {privacy: plugin.privacy.NOCACHE})
   instance.get('/', (req, reply) => {
     reply.send({hello: 'world'})
   })
@@ -77,9 +71,7 @@ test('sets private with max-age header', (t) => {
     privacy: plugin.privacy.PRIVATE,
     expiresIn: 300
   }
-  instance.register(plugin, opts, (err) => {
-    if (err) t.threw(err)
-  })
+  instance.register(plugin, opts)
   instance.get('/', (req, reply) => {
     reply.send({hello: 'world'})
   })
@@ -99,9 +91,7 @@ test('sets private with max-age header', (t) => {
 test('sets no-store with max-age header', (t) => {
   t.plan(2)
   const instance = fastify()
-  instance.register(plugin, {privacy: 'no-store', expiresIn: 300}, (err) => {
-    if (err) t.threw(err)
-  })
+  instance.register(plugin, {privacy: 'no-store', expiresIn: 300})
   instance.get('/', (req, reply) => {
     reply.send({hello: 'world'})
   })
@@ -122,9 +112,7 @@ test('sets the expires header', (t) => {
   t.plan(2)
   const now = new Date()
   const instance = fastify()
-  instance.register(plugin, {privacy: plugin.privacy.NOCACHE}, (err) => {
-    if (err) t.threw(err)
-  })
+  instance.register(plugin, {privacy: plugin.privacy.NOCACHE})
   instance.get('/', (req, reply) => {
     reply
       .expires(now)
