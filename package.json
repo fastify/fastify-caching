@@ -37,7 +37,7 @@
   },
   "dependencies": {
     "abstract-cache": "^1.0.0",
-    "fastify-plugin": "^0.2.1",
+    "fastify-plugin": "^0.2.2",
     "uid-safe": "^2.1.5"
   }
 }
