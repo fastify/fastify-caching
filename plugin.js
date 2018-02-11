@@ -84,7 +84,7 @@ function fastifyCachingPlugin (instance, options, next) {
 }
 
 module.exports = fp(fastifyCachingPlugin, {
-  fastify: '>=0.39.1',
+  fastify: '>=1.0.0-rc.1',
   name: 'fastify-caching'
 })
 
