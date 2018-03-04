@@ -1,5 +1,7 @@
 # fastify-caching
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/fastify/fastify-caching.svg)](https://greenkeeper.io/)
+
 *fastify-caching* is a plugin for the [Fastify](http://fastify.io/) framework
 that provides mechanisms for manipulating HTTP cache headers according to
 [RFC 2616 §14.9](https://tools.ietf.org/html/rfc2616#section-14.9).
