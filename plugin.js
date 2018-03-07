@@ -2,10 +2,12 @@
 
 const fp = require('fastify-plugin')
 const uidSafe = require('uid-safe')
+const abstractCache = require('abstract-cache')
+
 const defaultOptions = {
   expiresIn: undefined,
   privacy: undefined,
-  cache: require('abstract-cache')(),
+  cache: undefined,
   cacheSegment: 'fastify-caching'
 }
 
@@ -57,7 +59,7 @@ function fastifyCachingPlugin (instance, options, next) {
     _options = Object.assign({}, defaultOptions, options)
   }
 
-  if (!_options.cache) _options.cache = defaultOptions.cache
+  if (!_options.cache) _options.cache = abstractCache()
 
   if (_options.privacy) {
     // https://tools.ietf.org/html/rfc2616#section-14.9.4
