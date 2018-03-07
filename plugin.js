@@ -7,6 +7,7 @@ const abstractCache = require('abstract-cache')
 const defaultOptions = {
   expiresIn: undefined,
   privacy: undefined,
+  cache: undefined,
   cacheSegment: 'fastify-caching'
 }
 
