@@ -39,7 +39,7 @@ function etagHandleRequest (req, res, next) {
 }
 
 function etagOnSend (fastifyRequest, fastifyReply, payload, next) {
-  const etag = fastifyReply.res.getHeader('etag')
+  const etag = fastifyReply.getHeader('etag')
   if (!etag || !fastifyReply._etagLife) return next()
   this.cache.set(
     {id: etag, segment: this.cacheSegment},
@@ -84,7 +84,7 @@ function fastifyCachingPlugin (instance, options, next) {
 }
 
 module.exports = fp(fastifyCachingPlugin, {
-  fastify: '>=1.0.0-rc.1',
+  fastify: '^1.1.0',
   name: 'fastify-caching'
 })
 
