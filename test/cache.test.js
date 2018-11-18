@@ -23,7 +23,7 @@ test('cache is usable', (t) => {
   instance.register(plugin)
 
   instance.get('/one', (req, reply) => {
-    instance.cache.set('one', {one: true}, 100, (err) => {
+    instance.cache.set('one', { one: true }, 100, (err) => {
       if (err) return reply.send(err)
       reply.redirect('/two')
     })
@@ -32,7 +32,7 @@ test('cache is usable', (t) => {
   instance.get('/two', (req, reply) => {
     instance.cache.get('one', (err, obj) => {
       if (err) t.threw(err)
-      t.deepEqual(obj.item, {one: true})
+      t.deepEqual(obj.item, { one: true })
       reply.send()
     })
   })
@@ -60,7 +60,7 @@ test('etags get stored in cache', (t) => {
   instance.get('/one', (req, reply) => {
     reply
       .etag('123456')
-      .send({hello: 'world'})
+      .send({ hello: 'world' })
   })
 
   instance.listen(0, (err) => {
@@ -96,7 +96,7 @@ test('etag cache life is customizable', (t) => {
   instance.get('/one', function (req, reply) {
     reply
       .etag('123456', 50)
-      .send({hello: 'world'})
+      .send({ hello: 'world' })
   })
 
   instance.listen(0, (err) => {

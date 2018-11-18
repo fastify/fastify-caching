@@ -2,7 +2,7 @@
 
 *fastify-caching* is a plugin for the [Fastify](http://fastify.io/) framework
 that provides mechanisms for manipulating HTTP cache headers according to
-[RFC 2616 §14.9](https://tools.ietf.org/html/rfc2616#section-14.9).
+[RFC 2616 §14.9](https://tools.ietf.org/html/rfc2616#section-14.9). Supports Fastify versions < 2.0.0.
 
 This plugin fully supports Fastify's encapsulation. Therefore, routes that
 should have differing cache settings should be registered within different

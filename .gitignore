@@ -45,3 +45,7 @@ profile-*
 
 # VS Code
 .vscode/
+
+# lock files
+package-lock.json
+yarn.lock

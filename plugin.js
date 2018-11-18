@@ -30,7 +30,7 @@ function etag (value, lifetime) {
 function etagHandleRequest (req, res, next) {
   if (!req.headers['if-none-match']) return next()
   const etag = req.headers['if-none-match']
-  this.cache.get({id: etag, segment: this.cacheSegment}, (err, cached) => {
+  this.cache.get({ id: etag, segment: this.cacheSegment }, (err, cached) => {
     if (err) return next(err)
     if (cached && cached.item) {
       res.statusCode = 304
@@ -44,7 +44,7 @@ function etagOnSend (fastifyRequest, fastifyReply, payload, next) {
   const etag = fastifyReply.getHeader('etag')
   if (!etag || !fastifyReply._etagLife) return next()
   this.cache.set(
-    {id: etag, segment: this.cacheSegment},
+    { id: etag, segment: this.cacheSegment },
     true,
     fastifyReply._etagLife,
     next
@@ -86,7 +86,7 @@ function fastifyCachingPlugin (instance, options, next) {
 }
 
 module.exports = fp(fastifyCachingPlugin, {
-  fastify: '^1.1.0',
+  fastify: '>1.0.0 <2.0.0',
   name: 'fastify-caching'
 })
 
