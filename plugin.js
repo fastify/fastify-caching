@@ -33,8 +33,7 @@ function etagHandleRequest (req, res, next) {
   this.cache.get({ id: etag, segment: this.cacheSegment }, (err, cached) => {
     if (err) return next(err)
     if (cached && cached.item) {
-      res.statusCode = 304
-      return res.end()
+      return res.status(304).send()
     }
     next()
   })
@@ -86,7 +85,7 @@ function fastifyCachingPlugin (instance, options, next) {
 }
 
 module.exports = fp(fastifyCachingPlugin, {
-  fastify: '^1.0.0',
+  fastify: '^2.0.0',
   name: 'fastify-caching'
 })
 
