@@ -47,9 +47,9 @@ test('decorators add headers', (t) => {
 test('sets no-cache header', (t) => {
   t.plan(2)
   const instance = fastify()
-  instance.register(plugin, {privacy: plugin.privacy.NOCACHE})
+  instance.register(plugin, { privacy: plugin.privacy.NOCACHE })
   instance.get('/', (req, reply) => {
-    reply.send({hello: 'world'})
+    reply.send({ hello: 'world' })
   })
   instance.listen(0, (err) => {
     if (err) t.threw(err)
@@ -73,7 +73,7 @@ test('sets private with max-age header', (t) => {
   }
   instance.register(plugin, opts)
   instance.get('/', (req, reply) => {
-    reply.send({hello: 'world'})
+    reply.send({ hello: 'world' })
   })
   instance.listen(0, (err) => {
     if (err) t.threw(err)
@@ -91,9 +91,9 @@ test('sets private with max-age header', (t) => {
 test('sets no-store with max-age header', (t) => {
   t.plan(2)
   const instance = fastify()
-  instance.register(plugin, {privacy: 'no-store', expiresIn: 300})
+  instance.register(plugin, { privacy: 'no-store', expiresIn: 300 })
   instance.get('/', (req, reply) => {
-    reply.send({hello: 'world'})
+    reply.send({ hello: 'world' })
   })
   instance.listen(0, (err) => {
     if (err) t.threw(err)
@@ -112,11 +112,11 @@ test('sets the expires header', (t) => {
   t.plan(2)
   const now = new Date()
   const instance = fastify()
-  instance.register(plugin, {privacy: plugin.privacy.NOCACHE})
+  instance.register(plugin, { privacy: plugin.privacy.NOCACHE })
   instance.get('/', (req, reply) => {
     reply
       .expires(now)
-      .send({hello: 'world'})
+      .send({ hello: 'world' })
   })
   instance.listen(0, (err) => {
     if (err) t.threw(err)
