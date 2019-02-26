@@ -1,6 +1,6 @@
 {
   "name": "fastify-caching",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "description": "A plugin for Fastify to enable management of cache control headers",
   "main": "plugin.js",
   "scripts": {
