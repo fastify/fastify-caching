@@ -39,13 +39,13 @@ function etagHandleRequest (req, res, next) {
   })
 }
 
-function etagOnSend (fastifyRequest, fastifyReply, payload, next) {
-  const etag = fastifyReply.getHeader('etag')
-  if (!etag || !fastifyReply._etagLife) return next()
+function etagOnSend (req, res, payload, next) {
+  const etag = res.getHeader('etag')
+  if (!etag || !res._etagLife) return next()
   this.cache.set(
     { id: etag, segment: this.cacheSegment },
     true,
-    fastifyReply._etagLife,
+    res._etagLife,
     next
   )
 }
@@ -67,8 +67,8 @@ function fastifyCachingPlugin (instance, options, next) {
       value = `${_options.privacy}, max-age=${_options.expiresIn}`
     }
 
-    instance.addHook('preHandler', (fastifyReq, fastifyReply, next) => {
-      fastifyReply.header('Cache-control', value)
+    instance.addHook('onRequest', (req, res, next) => {
+      res.header('Cache-control', value)
       next()
     })
   }
@@ -81,6 +81,7 @@ function fastifyCachingPlugin (instance, options, next) {
   instance.addHook('onRequest', etagHandleRequest)
   instance.addHook('onSend', etagOnSend)
 
+  instance[Symbol.for('fastify-caching.registered')] = true
   next()
 }
 
