@@ -18,9 +18,22 @@ test('cache property gets added to instance', (t) => {
 })
 
 test('cache is usable', (t) => {
-  t.plan(1)
+  t.plan(3)
   const instance = fastify()
-  instance.register(plugin)
+  instance
+    .register((i, o, n) => {
+      i.addHook('onRequest', function (req, reply, done) {
+        t.notOk(i[Symbol.for('fastify-caching.registered')])
+        done()
+      })
+      n()
+    })
+    .register(plugin)
+
+  instance.addHook('preParsing', function (req, reply, done) {
+    t.is(this[Symbol.for('fastify-caching.registered')], true)
+    done()
+  })
 
   instance.get('/one', (req, reply) => {
     instance.cache.set('one', { one: true }, 100, (err) => {
