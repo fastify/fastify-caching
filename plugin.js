@@ -1,5 +1,7 @@
 'use strict'
 
+/* eslint no-prototype-builtins: 0 */
+
 const fp = require('fastify-plugin')
 const uidSafe = require('uid-safe')
 const abstractCache = require('abstract-cache')
