@@ -38,8 +38,8 @@ test('decorators add headers', (t) => {
     const portNum = instance.server.address().port
     const address = `http://127.0.0.1:${portNum}`
     http.get(address, (res) => {
-      t.ok(res.headers['etag'])
-      t.is(res.headers['etag'], tag)
+      t.ok(res.headers.etag)
+      t.is(res.headers.etag, tag)
     }).on('error', (err) => t.threw(err))
   })
 })
@@ -125,8 +125,8 @@ test('sets the expires header', (t) => {
     const address = `http://127.0.0.1:${portNum}`
 
     http.get(address, (res) => {
-      t.ok(res.headers['expires'])
-      t.is(res.headers['expires'], now.toUTCString())
+      t.ok(res.headers.expires)
+      t.is(res.headers.expires, now.toUTCString())
     }).on('error', (err) => t.threw(err))
   })
 })
