@@ -1,10 +1,10 @@
 # fastify-caching
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/fastify/fastify-caching.svg)](https://greenkeeper.io/) [![Build Status](https://travis-ci.org/fastify/fastify-caching.svg?branch=master)](https://travis-ci.org/fastify/fastify-caching)
+![CI workflow](https://github.com/fastify/fastify-caching/workflows/CI%20workflow/badge.svg)
 
 *fastify-caching* is a plugin for the [Fastify](http://fastify.io/) framework
 that provides mechanisms for manipulating HTTP cache headers according to
-[RFC 2616 §14.9](https://tools.ietf.org/html/rfc2616#section-14.9). 
+[RFC 2616 §14.9](https://tools.ietf.org/html/rfc2616#section-14.9).
 
 Supports Fastify versions ^2.0.0.
 
