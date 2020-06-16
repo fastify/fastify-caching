@@ -30,9 +30,9 @@ test('cache is usable', (t) => {
     })
     .register(plugin)
 
-  instance.addHook('preParsing', function (req, reply, done) {
+  instance.addHook('preParsing', function (req, reply, payload, done) {
     t.is(this[Symbol.for('fastify-caching.registered')], true)
-    done()
+    done(null, payload)
   })
 
   instance.get('/one', (req, reply) => {
