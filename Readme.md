@@ -57,7 +57,8 @@ It also shows how to retain a reference to the cache object so that it can
 be re-used.
 
 ```js
-const redis = require('ioredis')({host: '127.0.0.1'})
+const IORedis = require('ioredis')
+const redis = new IORedis({host: '127.0.0.1'})
 const abcache = require('abstract-cache')({
   useAwait: false,
   driver: {
