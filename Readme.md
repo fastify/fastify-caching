@@ -29,7 +29,7 @@ routes.
 
 ```js
 const http = require('http')
-const fastify = require('fastify')
+const fastify = require('fastify')()
 const fastifyCaching = require('fastify-caching')
 
 fastify.register(
