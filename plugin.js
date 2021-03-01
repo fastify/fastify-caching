@@ -48,7 +48,7 @@ function etagOnSend (req, res, payload, next) {
     { id: etag, segment: this.cacheSegment },
     true,
     res._etagLife,
-    next
+    (err) => next(err, payload)
   )
 }
 
