@@ -138,3 +138,36 @@ test('etag cache life is customizable', (t) => {
       .on('error', t.threw)
   })
 })
+
+test('returns response payload', (t) => {
+  t.plan(1)
+  const instance = fastify()
+  instance.register(plugin)
+
+  instance.get('/one', (req, reply) => {
+    reply
+      .etag('123456', 300)
+      .send({ hello: 'world' })
+  })
+
+  instance.listen(0, (err) => {
+    if (err) t.threw(err)
+    instance.server.unref()
+    const portNum = instance.server.address().port
+    const opts = {
+      host: '127.0.0.1',
+      port: portNum,
+      path: '/one'
+    }
+    http
+      .get(opts, (res) => {
+        let payload = ''
+        res.on('data', (chunk) => {
+          payload += chunk
+        }).on('end', () => {
+          t.same(JSON.parse(payload), { hello: 'world' })
+        }).on('error', t.threw)
+      })
+      .on('error', t.threw)
+  })
+})
