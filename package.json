@@ -6,8 +6,7 @@
   "scripts": {
     "lint": "standard --verbose | snazzy",
     "lint:ci": "standard",
-    "test": "tap test/*.test.js",
-    "test:ci": "tap --cov test/*.test.js"
+    "test": "tap test/*.test.js"
   },
   "precommit": [
     "lint",
