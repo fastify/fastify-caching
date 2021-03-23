@@ -4,10 +4,10 @@
   "description": "A plugin for Fastify to enable management of cache control headers",
   "main": "plugin.js",
   "scripts": {
-    "test": "tap test/*.test.js",
-    "test-ci": "tap --cov test/*.test.js",
     "lint": "standard --verbose | snazzy",
-    "lint-ci": "standard"
+    "lint:ci": "standard",
+    "test": "tap test/*.test.js",
+    "test:ci": "tap --cov test/*.test.js"
   },
   "precommit": [
     "lint",
