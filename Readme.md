@@ -1,6 +1,9 @@
 # fastify-caching
 
-![CI workflow](https://github.com/fastify/fastify-caching/workflows/CI%20workflow/badge.svg)
+![CI](https://github.com/fastify/fastify-caching/workflows/CI/badge.svg)
+[![NPM version](https://img.shields.io/npm/v/fastify-caching.svg?style=flat)](https://www.npmjs.com/package/fastify-caching)
+[![Known Vulnerabilities](https://snyk.io/test/github/fastify/fastify-caching/badge.svg)](https://snyk.io/test/github/fastify/fastify-caching)
+[![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://standardjs.com/)
 
 *fastify-caching* is a plugin for the [Fastify](http://fastify.io/) framework
 that provides mechanisms for manipulating HTTP cache headers according to
@@ -146,4 +149,4 @@ object, or a string that is a valid date string according to
 
 ## License
 
-[MIT License](http://jsumners.mit-license.org/)
+[MIT License](https://jsumners.mit-license.org/)
