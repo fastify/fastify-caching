@@ -149,4 +149,4 @@ object, or a string that is a valid date string according to
 
 ## License
 
-[MIT License](http://jsumners.mit-license.org/)
+[MIT License](https://jsumners.mit-license.org/)
