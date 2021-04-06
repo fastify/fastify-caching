@@ -45,7 +45,7 @@ test('cache is usable', (t) => {
   instance.get('/two', (req, reply) => {
     instance.cache.get('one', (err, obj) => {
       if (err) t.threw(err)
-      t.deepEqual(obj.item, { one: true })
+      t.same(obj.item, { one: true })
       reply.send()
     })
   })
