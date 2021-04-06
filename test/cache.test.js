@@ -31,7 +31,7 @@ test('cache is usable', (t) => {
     .register(plugin)
 
   instance.addHook('preParsing', function (req, reply, payload, done) {
-    t.is(this[Symbol.for('fastify-caching.registered')], true)
+    t.equal(this[Symbol.for('fastify-caching.registered')], true)
     done(null, payload)
   })
 
@@ -45,7 +45,7 @@ test('cache is usable', (t) => {
   instance.get('/two', (req, reply) => {
     instance.cache.get('one', (err, obj) => {
       if (err) t.threw(err)
-      t.deepEqual(obj.item, { one: true })
+      t.same(obj.item, { one: true })
       reply.send()
     })
   })
@@ -93,7 +93,7 @@ test('etags get stored in cache', (t) => {
         }
         http
           .get(opts, (res) => {
-            t.is(res.statusCode, 304)
+            t.equal(res.statusCode, 304)
           })
           .on('error', t.threw)
       })
@@ -130,7 +130,7 @@ test('etag cache life is customizable', (t) => {
         setTimeout(() => {
           http
             .get(opts, (res) => {
-              t.is(res.statusCode, 200)
+              t.equal(res.statusCode, 200)
             })
             .on('error', t.threw)
         }, 150)
