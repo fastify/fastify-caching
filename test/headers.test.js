@@ -44,6 +44,26 @@ test('decorators add headers', (t) => {
   })
 })
 
+test('sets etag header for falsy argument', (t) => {
+  t.plan(1)
+  const instance = fastify()
+  instance.register(plugin)
+  instance.get('/', (req, reply) => {
+    reply
+      .etag()
+      .send()
+  })
+  instance.listen(0, (err) => {
+    if (err) t.threw(err)
+    instance.server.unref()
+    const portNum = instance.server.address().port
+    const address = `http://127.0.0.1:${portNum}`
+    http.get(address, (res) => {
+      t.ok(res.headers.etag)
+    }).on('error', (err) => t.threw(err))
+  })
+})
+
 test('sets no-cache header', (t) => {
   t.plan(2)
   const instance = fastify()
@@ -127,6 +147,27 @@ test('sets the expires header', (t) => {
     http.get(address, (res) => {
       t.ok(res.headers.expires)
       t.equal(res.headers.expires, now.toUTCString())
+    }).on('error', (err) => t.threw(err))
+  })
+})
+
+test('sets the expires header to a falsy value', (t) => {
+  t.plan(1)
+  const instance = fastify()
+  instance.register(plugin, { privacy: plugin.privacy.NOCACHE })
+  instance.get('/', (req, reply) => {
+    reply
+      .expires()
+      .send({ hello: 'world' })
+  })
+  instance.listen(0, (err) => {
+    if (err) t.threw(err)
+    instance.server.unref()
+    const portNum = instance.server.address().port
+    const address = `http://127.0.0.1:${portNum}`
+
+    http.get(address, (res) => {
+      t.notOk(res.headers.expires)
     }).on('error', (err) => t.threw(err))
   })
 })
