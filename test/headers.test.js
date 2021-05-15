@@ -171,3 +171,25 @@ test('sets the expires header to a falsy value', (t) => {
     }).on('error', (err) => t.threw(err))
   })
 })
+
+test('sets the expires header to a custom value', (t) => {
+  t.plan(2)
+  const instance = fastify()
+  instance.register(plugin, { privacy: plugin.privacy.NOCACHE })
+  instance.get('/', (req, reply) => {
+    reply
+      .expires('foobar')
+      .send({ hello: 'world' })
+  })
+  instance.listen(0, (err) => {
+    if (err) t.threw(err)
+    instance.server.unref()
+    const portNum = instance.server.address().port
+    const address = `http://127.0.0.1:${portNum}`
+
+    http.get(address, (res) => {
+      t.ok(res.headers.expires)
+      t.equal(res.headers.expires, 'foobar')
+    }).on('error', (err) => t.threw(err))
+  })
+})
