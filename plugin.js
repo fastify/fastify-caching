@@ -71,7 +71,7 @@ function fastifyCachingPlugin (instance, options, next) {
     }
 
     if (_options.privacy.toLowerCase() == 'public' && _options.serverExpiresIn) {
-      value += `s-maxage=${_options.serverExpiresIn}`
+      value += `, s-maxage=${_options.serverExpiresIn}`
     }
 
     instance.addHook('onRequest', (req, res, next) => {
