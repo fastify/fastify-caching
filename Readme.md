@@ -106,7 +106,7 @@ fastify.listen(3000, (err) => {
 for a *cache-response-directive* as defined by RFC 2616.
 + `expiresIn` (Default: `undefined`): a value, in seconds, for the *max-age* the
 resource may be cached. When this is set, and `privacy` is not set to `no-cache`,
-then `', max-age=<value>'` will be appended to the `cache-control` header. (300 seconds = 5 minutes)
+then `', max-age=<value>'` will be appended to the `cache-control` header. 
 + `cache` (Default: `abstract-cache.memclient`): an [abstract-cache][acache]
 protocol compliant cache object. Note: the plugin requires a cache instance to
 properly support the ETag mechanism. Therefore, if a falsy value is supplied
