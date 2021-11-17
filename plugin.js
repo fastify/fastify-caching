@@ -70,7 +70,7 @@ function fastifyCachingPlugin (instance, options, next) {
       value = `${_options.privacy}, max-age=${_options.expiresIn}`
     }
 
-    if (_options.privacy.toLowerCase() == 'public' && _options.serverExpiresIn) {
+    if (_options.privacy.toLowerCase() === 'public' && _options.serverExpiresIn) {
       value += `, s-maxage=${_options.serverExpiresIn}`
     }
 
