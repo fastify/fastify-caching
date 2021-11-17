@@ -8,6 +8,7 @@ const abstractCache = require('abstract-cache')
 
 const defaultOptions = {
   expiresIn: undefined,
+  serverExpiresIn: undefined,
   privacy: undefined,
   cache: undefined,
   cacheSegment: 'fastify-caching'
@@ -67,6 +68,10 @@ function fastifyCachingPlugin (instance, options, next) {
     let value = _options.privacy
     if (_options.privacy.toLowerCase() !== 'no-cache' && _options.expiresIn) {
       value = `${_options.privacy}, max-age=${_options.expiresIn}`
+    }
+
+    if (_options.privacy.toLowerCase() === 'public' && _options.serverExpiresIn) {
+      value += `, s-maxage=${_options.serverExpiresIn}`
     }
 
     instance.addHook('onRequest', (req, res, next) => {

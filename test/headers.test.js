@@ -108,6 +108,80 @@ test('sets private with max-age header', (t) => {
   })
 })
 
+test('sets public with max-age and s-maxage header', (t) => {
+  t.plan(2)
+  const instance = fastify()
+  const opts = {
+    privacy: plugin.privacy.PUBLIC,
+    expiresIn: 300,
+    serverExpiresIn: 12345
+  }
+  instance.register(plugin, opts)
+  instance.get('/', (req, reply) => {
+    reply.send({ hello: 'world' })
+  })
+  instance.listen(0, (err) => {
+    if (err) t.threw(err)
+    instance.server.unref()
+    const portNum = instance.server.address().port
+    const address = `http://127.0.0.1:${portNum}`
+
+    http.get(address, (res) => {
+      t.ok(res.headers['cache-control'])
+      t.equal(res.headers['cache-control'], 'public, max-age=300, s-maxage=12345')
+    }).on('error', (err) => t.threw(err))
+  })
+})
+
+test('only sets max-age and ignores s-maxage with private header', (t) => {
+  t.plan(2)
+  const instance = fastify()
+  const opts = {
+    privacy: plugin.privacy.PRIVATE,
+    expiresIn: 300,
+    serverExpiresIn: 12345
+  }
+  instance.register(plugin, opts)
+  instance.get('/', (req, reply) => {
+    reply.send({ hello: 'world' })
+  })
+  instance.listen(0, (err) => {
+    if (err) t.threw(err)
+    instance.server.unref()
+    const portNum = instance.server.address().port
+    const address = `http://127.0.0.1:${portNum}`
+
+    http.get(address, (res) => {
+      t.ok(res.headers['cache-control'])
+      t.equal(res.headers['cache-control'], 'private, max-age=300')
+    }).on('error', (err) => t.threw(err))
+  })
+})
+
+test('s-maxage is optional with public header', (t) => {
+  t.plan(2)
+  const instance = fastify()
+  const opts = {
+    privacy: plugin.privacy.PUBLIC,
+    expiresIn: 300
+  }
+  instance.register(plugin, opts)
+  instance.get('/', (req, reply) => {
+    reply.send({ hello: 'world' })
+  })
+  instance.listen(0, (err) => {
+    if (err) t.threw(err)
+    instance.server.unref()
+    const portNum = instance.server.address().port
+    const address = `http://127.0.0.1:${portNum}`
+
+    http.get(address, (res) => {
+      t.ok(res.headers['cache-control'])
+      t.equal(res.headers['cache-control'], 'public, max-age=300')
+    }).on('error', (err) => t.threw(err))
+  })
+})
+
 test('sets no-store with max-age header', (t) => {
   t.plan(2)
   const instance = fastify()
