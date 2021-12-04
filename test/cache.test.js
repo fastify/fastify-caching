@@ -210,7 +210,7 @@ test('etag cache life is customizable', (t) => {
       t.error(err)
 
       // We wait 70 milliseconds that the cache expires
-      setTimeout(async () => {
+      setTimeout(() => {
         fastify.inject({
           method: 'GET',
           path: '/one',
