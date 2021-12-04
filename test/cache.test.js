@@ -30,9 +30,9 @@ test('cache is usable', (t) => {
     })
     .register(plugin)
 
-  instance.addHook('preParsing', function (req, reply, payload, done) {
+  instance.addHook('onRequest', function (req, reply, done) {
     t.equal(this[Symbol.for('fastify-caching.registered')], true)
-    done(null, payload)
+    done()
   })
 
   instance.get('/one', (req, reply) => {
@@ -78,9 +78,9 @@ test('cache is usable with function as plugin default options input', (t) => {
     })
     .register(plugin, () => () => { })
 
-  instance.addHook('preParsing', function (req, reply, payload, done) {
+  instance.addHook('onRequest', function (req, reply, done) {
     t.equal(this[Symbol.for('fastify-caching.registered')], true)
-    done(null, payload)
+    done()
   })
 
   instance.get('/one', (req, reply) => {
