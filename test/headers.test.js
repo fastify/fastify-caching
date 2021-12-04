@@ -10,8 +10,6 @@ test('decorators get added', async (t) => {
   const fastify = Fastify()
   await fastify.register(plugin)
 
-  t.teardown(fastify.close.bind(fastify))
-
   fastify.get('/', (req, reply) => {
     t.ok(reply.etag)
     reply.send()
@@ -32,8 +30,6 @@ test('decorators add headers', async (t) => {
 
   const fastify = Fastify()
   await fastify.register(plugin)
-
-  t.teardown(fastify.close.bind(fastify))
 
   fastify.get('/', (req, reply) => {
     reply
@@ -57,8 +53,6 @@ test('sets etag header for falsy argument', async (t) => {
   const fastify = Fastify()
   await fastify.register(plugin)
 
-  t.teardown(fastify.close.bind(fastify))
-
   fastify.get('/', (req, reply) => {
     reply
       .etag()
@@ -79,8 +73,6 @@ test('sets no-cache header', async (t) => {
 
   const fastify = Fastify()
   await fastify.register(plugin, { privacy: plugin.privacy.NOCACHE })
-
-  t.teardown(fastify.close.bind(fastify))
 
   fastify.get('/', (req, reply) => {
     reply.send({ hello: 'world' })
@@ -106,8 +98,6 @@ test('sets private with max-age header', async (t) => {
 
   const fastify = Fastify()
   await fastify.register(plugin, opts)
-
-  t.teardown(fastify.close.bind(fastify))
 
   fastify.get('/', (req, reply) => {
     reply.send({ hello: 'world' })
@@ -135,8 +125,6 @@ test('sets public with max-age and s-maxage header', async (t) => {
   const fastify = Fastify()
   await fastify.register(plugin, opts)
 
-  t.teardown(fastify.close.bind(fastify))
-
   fastify.get('/', (req, reply) => {
     reply.send({ hello: 'world' })
   })
@@ -163,8 +151,6 @@ test('only sets max-age and ignores s-maxage with private header', async (t) => 
   const fastify = Fastify()
   await fastify.register(plugin, opts)
 
-  t.teardown(fastify.close.bind(fastify))
-
   fastify.get('/', (req, reply) => {
     reply.send({ hello: 'world' })
   })
@@ -190,8 +176,6 @@ test('s-maxage is optional with public header', async (t) => {
   const fastify = Fastify()
   await fastify.register(plugin, opts)
 
-  t.teardown(fastify.close.bind(fastify))
-
   fastify.get('/', (req, reply) => {
     reply.send({ hello: 'world' })
   })
@@ -211,8 +195,6 @@ test('sets no-store with max-age header', async (t) => {
 
   const fastify = Fastify()
   await fastify.register(plugin, { privacy: 'no-store', expiresIn: 300 })
-
-  t.teardown(fastify.close.bind(fastify))
 
   fastify.get('/', (req, reply) => {
     reply.send({ hello: 'world' })
@@ -236,8 +218,6 @@ test('sets the expires header', async (t) => {
   const fastify = Fastify()
   await fastify.register(plugin, { privacy: plugin.privacy.NOCACHE })
 
-  t.teardown(fastify.close.bind(fastify))
-
   fastify.get('/', (req, reply) => {
     reply
       .expires(now)
@@ -260,8 +240,6 @@ test('sets the expires header to a falsy value', async (t) => {
   const fastify = Fastify()
   await fastify.register(plugin, { privacy: plugin.privacy.NOCACHE })
 
-  t.teardown(fastify.close.bind(fastify))
-
   fastify.get('/', (req, reply) => {
     reply
       .expires()
@@ -282,8 +260,6 @@ test('sets the expires header to a custom value', async (t) => {
 
   const fastify = Fastify()
   await fastify.register(plugin, { privacy: plugin.privacy.NOCACHE })
-
-  t.teardown(fastify.close.bind(fastify))
 
   fastify.get('/', (req, reply) => {
     reply
