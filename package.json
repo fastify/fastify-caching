@@ -28,11 +28,11 @@
   },
   "homepage": "https://github.com/fastify/fastify-caching#readme",
   "devDependencies": {
-    "fastify": "^3.0.0",
+    "fastify": "^3.24.1",
     "pre-commit": "^1.2.2",
     "snazzy": "^9.0.0",
-    "standard": "^16.0.1",
-    "tap": "^15.0.2"
+    "standard": "^16.0.4",
+    "tap": "^15.1.5"
   },
   "dependencies": {
     "abstract-cache": "^1.0.1",
