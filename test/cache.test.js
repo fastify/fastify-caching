@@ -24,18 +24,16 @@ test('cache is usable', async (t) => {
 
   await fastify
     .register(async (instance, options) => {
-      instance.addHook('onRequest', function (req, reply, done) {
+      instance.addHook('onRequest', async function (req, reply) {
         t.notOk(instance[Symbol.for('fastify-caching.registered')])
-        done()
       })
     })
     .register(plugin)
 
   t.teardown(fastify.close.bind(fastify))
 
-  fastify.addHook('onRequest', function (req, reply, done) {
+  fastify.addHook('onRequest', async function (req, reply) {
     t.equal(this[Symbol.for('fastify-caching.registered')], true)
-    done()
   })
 
   fastify.get('/one', (req, reply) => {
@@ -78,18 +76,16 @@ test('cache is usable with function as plugin default options input', async (t) 
   const fastify = Fastify()
   await fastify
     .register(async (instance, options) => {
-      instance.addHook('onRequest', function (req, reply, done) {
+      instance.addHook('onRequest', async function (req, reply) {
         t.notOk(instance[Symbol.for('fastify-caching.registered')])
-        done()
       })
     })
     .register(plugin, () => () => { })
 
   t.teardown(fastify.close.bind(fastify))
 
-  fastify.addHook('onRequest', function (req, reply, done) {
+  fastify.addHook('onRequest', async function (req, reply) {
     t.equal(this[Symbol.for('fastify-caching.registered')], true)
-    done()
   })
 
   fastify.get('/one', (req, reply) => {
@@ -269,5 +265,6 @@ test('returns response payload', async (t) => {
     method: 'GET',
     path: '/one'
   })
+
   t.same(JSON.parse(response.payload), { hello: 'world' })
 })
