@@ -17,7 +17,7 @@ test('cache property gets added to instance', async (t) => {
 })
 
 test('cache is usable', async (t) => {
-  t.plan(3)
+  t.plan(4)
 
   const fastify = Fastify()
   await fastify.register(async (instance, options) => {
@@ -32,7 +32,7 @@ test('cache is usable', async (t) => {
   })
 
   fastify.get('/one', (req, reply) => {
-    fastify.cache.set('one', { one: true }, 100, (err) => {
+    fastify.cache.set('one', { one: true }, 1000, (err) => {
       if (err) return reply.send(err)
       reply.redirect('/two')
     })
@@ -40,8 +40,9 @@ test('cache is usable', async (t) => {
 
   fastify.get('/two', (req, reply) => {
     fastify.cache.get('one', (err, obj) => {
-      if (err) t.threw(err)
+      t.error(err)
       t.same(obj.item, { one: true })
+
       reply.send()
     })
   })
@@ -66,7 +67,7 @@ test('cache is usable', async (t) => {
 })
 
 test('cache is usable with function as plugin default options input', async (t) => {
-  t.plan(3)
+  t.plan(4)
 
   const fastify = Fastify()
   await fastify.register(async (instance, options) => {
@@ -81,7 +82,7 @@ test('cache is usable with function as plugin default options input', async (t) 
   })
 
   fastify.get('/one', (req, reply) => {
-    fastify.cache.set('one', { one: true }, 100, (err) => {
+    fastify.cache.set('one', { one: true }, 1000, (err) => {
       if (err) return reply.send(err)
       reply.redirect('/two')
     })
@@ -89,8 +90,9 @@ test('cache is usable with function as plugin default options input', async (t) 
 
   fastify.get('/two', (req, reply) => {
     fastify.cache.get('one', (err, obj) => {
-      if (err) t.threw(err)
+      t.error(err)
       t.same(obj.item, { one: true })
+
       reply.send()
     })
   })
