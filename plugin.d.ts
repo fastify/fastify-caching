@@ -13,6 +13,8 @@ declare module 'fastify' {
     /**
      * This method allows setting of the `expires` header.
      *
+     * @link [reply.expires() documentation](https://github.com/fastify/fastify-caching#replyexpiresdate)
+     * 
      * @param date A regular `Date` object, or a valid date string according to [RFC 2616 section 14.21](https://datatracker.ietf.org/doc/html/rfc2616#section-14.21).
      */
     expires(date?: Date): this;
@@ -20,7 +22,7 @@ declare module 'fastify' {
     /**
      * This method allows setting of the `etag` header.
      *
-     * @documentation [reply.etag() documentation](https://github.com/fastify/fastify-caching#replyetagstring-number)
+     * @link [reply.etag() documentation](https://github.com/fastify/fastify-caching#replyetagstring-number)
      *
      * @param tag Any arbitrary string that is valid for HTTP headers.
      * @param timeToLive The time must be specified in milliseconds. The default lifetime, when the parameter is not specified, is `3600000`.
