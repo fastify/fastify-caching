@@ -3,10 +3,12 @@
   "version": "6.2.0",
   "description": "A plugin for Fastify to enable management of cache control headers",
   "main": "plugin.js",
+  "types": "plugin.d.ts",
   "scripts": {
     "lint": "standard --verbose | snazzy",
     "lint:ci": "standard",
-    "test": "npm run unit",
+    "test": "npm run unit && npm run test:types",
+    "test:types": "tsd",
     "unit": "tap -J \"test/*.test.js\"",
     "unit:report": "npm run unit -- --coverage-report=html",
     "unit:verbose": "npm run unit -- -Rspec"
@@ -31,15 +33,20 @@
   },
   "homepage": "https://github.com/fastify/fastify-caching#readme",
   "devDependencies": {
+    "@types/node": "^17.0.17",
     "fastify": "^3.27.1",
     "pre-commit": "^1.2.2",
     "snazzy": "^9.0.0",
     "standard": "^16.0.4",
-    "tap": "^15.1.6"
+    "tap": "^15.1.6",
+    "tsd": "^0.19.1"
   },
   "dependencies": {
     "abstract-cache": "^1.0.1",
     "fastify-plugin": "^3.0.1",
     "uid-safe": "^2.1.5"
+  },
+  "tsd": {
+    "directory": "test/types"
   }
 }
