@@ -14,7 +14,7 @@ declare module 'fastify' {
      * This method allows setting of the `expires` header.
      *
      * @link [reply.expires() documentation](https://github.com/fastify/fastify-caching#replyexpiresdate)
-     * 
+     *
      * @param date A regular `Date` object, or a valid date string according to [RFC 2616 section 14.21](https://datatracker.ietf.org/doc/html/rfc2616#section-14.21).
      */
     expires(date?: Date): this;
@@ -32,12 +32,12 @@ declare module 'fastify' {
 }
 
 export interface AbstractCacheCompliantObject {
-  get(key: any, callback?: (done?: any) => void): void;
+  get(key: any, callback?: (error: any, done?: any) => void): void;
   set(
-    key: string,
+    key: any,
     value: any,
     timeToLive: number,
-    callback: (done?: any) => void
+    callback: (error?: any) => void
   ): void;
 }
 
