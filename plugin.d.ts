@@ -32,7 +32,7 @@ declare module 'fastify' {
 }
 
 /**
- * @link [abstract-cache protocol documentation](https://github.com/jsumners/abstract-cache#protocol)
+ * @link [`abstract-cache` protocol documentation](https://github.com/jsumners/abstract-cache#protocol)
  */
 export interface AbstractCacheCompliantObject {
   get(
