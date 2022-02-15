@@ -31,16 +31,19 @@ declare module 'fastify' {
   }
 }
 
+/**
+ * @link [abstract-cache protocol documentation](https://github.com/jsumners/abstract-cache#protocol)
+ */
 export interface AbstractCacheCompliantObject {
   get(
     key: string | { id: string; segment?: string },
-    callback?: (error: unknown, done: unknown) => void
+    callback?: (error: unknown, result: unknown) => void
   ): void;
   set(
     key: string | { id: string; segment?: string },
     value: unknown,
     timeToLive: number,
-    callback?: (error: unknown, done: unknown) => void
+    callback?: (error: unknown, result: unknown) => void
   ): void;
 }
 
