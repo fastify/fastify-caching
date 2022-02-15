@@ -32,12 +32,15 @@ declare module 'fastify' {
 }
 
 export interface AbstractCacheCompliantObject {
-  get(key: any, callback?: (error: any, done?: any) => void): void;
+  get(
+    key: string | { id: string; segment?: string },
+    callback?: (error: unknown, done: unknown) => void
+  ): void;
   set(
-    key: any,
-    value: any,
+    key: string | { id: string; segment?: string },
+    value: unknown,
     timeToLive: number,
-    callback: (error?: any) => void
+    callback?: (error: unknown, done: unknown) => void
   ): void;
 }
 

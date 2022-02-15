@@ -17,6 +17,8 @@ expectAssignable<FastifyCachingPluginOptions>(cachingOptions);
 fastify.register(fastifyCaching, cachingOptions);
 
 expectType<AbstractCacheCompliantObject>(fastify.cache);
+expectType<AbstractCacheCompliantObject['get']>(fastify.cache.get);
+expectType<AbstractCacheCompliantObject['set']>(fastify.cache.set);
 expectType<string>(fastify.cacheSegment);
 // expectType<number>(fastify.etagMaxLife);
 
@@ -38,13 +40,13 @@ fastify.get('/two', async (request, reply) => {
   return { message: 'two' };
 });
 
+// We register a new instance that should trigger a typescript error.
+const shouldErrorApp = Fastify({ logger: true });
+
 const badCachingOptions = {
   privacy: fastifyCaching.privacy.PRIVATE,
   expiresIn: 'a string instead of a number of second',
   cacheSegment: 'fastify-caching',
 };
-
-// We register a new instance that should trigger a typescript error.
-const shouldErrorApp = Fastify({ logger: true })
 
 expectError(shouldErrorApp.register(fastifyCaching, badCachingOptions));
