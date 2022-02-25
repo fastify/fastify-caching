@@ -82,7 +82,6 @@ function fastifyCachingPlugin (instance, options, next) {
 
   instance.decorate('cache', _options.cache)
   instance.decorate('cacheSegment', _options.cacheSegment)
-  instance.decorate('etagMaxLife', _options.etagMaxLife)
   instance.decorateReply('etag', etag)
   instance.decorateReply('expires', cachingExpires)
   instance.addHook('onRequest', etagHandleRequest)
