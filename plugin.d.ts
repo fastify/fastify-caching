@@ -6,6 +6,7 @@ declare module 'fastify' {
   interface FastifyInstance {
     cache: AbstractCacheCompliantObject;
     cacheSegment: string;
+    etagMaxLife: number | undefined;
   }
 
   interface FastifyReply {
@@ -71,6 +72,8 @@ export interface FastifyCachingPluginOptions {
    * - Default value: `fastify-caching`
    */
   cacheSegment?: string;
+
+  etagMaxLife?: number;
 
   /**
    * A value, in seconds, for the max-age the resource may be cached.
