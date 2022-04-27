@@ -1,6 +1,6 @@
 {
-  "name": "fastify-caching",
-  "version": "6.2.0",
+  "name": "@fastify/caching",
+  "version": "7.0.0",
   "description": "A plugin for Fastify to enable management of cache control headers",
   "main": "plugin.js",
   "types": "plugin.d.ts",
@@ -48,5 +48,8 @@
   },
   "tsd": {
     "directory": "test/types"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
