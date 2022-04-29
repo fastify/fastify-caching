@@ -1,11 +1,11 @@
-# fastify-caching
+# @fastify/caching
 
 ![CI](https://github.com/fastify/fastify-caching/workflows/CI/badge.svg)
-[![NPM version](https://img.shields.io/npm/v/fastify-caching.svg?style=flat)](https://www.npmjs.com/package/fastify-caching)
+[![NPM version](https://img.shields.io/npm/v/@fastify/caching.svg?style=flat)](https://www.npmjs.com/package/@fastify/caching)
 [![Known Vulnerabilities](https://snyk.io/test/github/fastify/fastify-caching/badge.svg)](https://snyk.io/test/github/fastify/fastify-caching)
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://standardjs.com/)
 
-*fastify-caching* is a plugin for the [Fastify](http://fastify.io/) framework
+*@fastify/caching* is a plugin for the [Fastify](http://fastify.io/) framework
 that provides mechanisms for manipulating HTTP cache headers according to
 [RFC 2616 §14.9](https://tools.ietf.org/html/rfc2616#section-14.9).
 
@@ -33,7 +33,7 @@ routes.
 ```js
 const http = require('http')
 const fastify = require('fastify')()
-const fastifyCaching = require('fastify-caching')
+const fastifyCaching = require('@fastify/caching')
 
 fastify.register(
   fastifyCaching,
@@ -72,8 +72,8 @@ const abcache = require('abstract-cache')({
 
 const fastify = require('fastify')()
 fastify
-  .register(require('fastify-redis'), {client: redis})
-  .register(require('fastify-caching'), {cache: abcache})
+  .register(require('@fastify/redis'), {client: redis})
+  .register(require('@fastify/caching'), {cache: abcache})
 
 fastify.get('/', (req, reply) => {
   fastify.cache.set('hello', {hello: 'world'}, 10000, (err) => {
@@ -91,7 +91,7 @@ fastify.listen(3000, (err) => {
 
 ### Options
 
-*fastify-caching* accepts the options object:
+*@fastify/caching* accepts the options object:
 
 ```js
 {
@@ -111,7 +111,7 @@ then `', max-age=<value>'` will be appended to the `cache-control` header.
 protocol compliant cache object. Note: the plugin requires a cache instance to
 properly support the ETag mechanism. Therefore, if a falsy value is supplied
 the default will be used.
-+ `cacheSegment` (Default: `'fastify-caching'`): segment identifier to use when
++ `cacheSegment` (Default: `'@fastify/caching'`): segment identifier to use when
 communicating with the cache.
 + `serverExpiresIn` (Default: `undefined`): a value, in seconds, for the length of time the resource is fresh and may be held in a shared cache (e.g. a CDN). Shared caches will ignore max-age when this is specified, though browsers will continue to use max-age. Should be used with expiresIn, not in place of it. When this is set, and `privacy` is set to `public`,  then `', s-maxage=<value>'` will be appended to the `cache-control` header.  
 
