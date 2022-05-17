@@ -44,7 +44,7 @@ fastify.get('/', (req, reply) => {
   reply.send({hello: 'world'})
 })
 
-fastify.listen(3000, (err) => {
+fastify.listen({ port: 3000 }, (err) => {
   if (err) throw err
 
   http.get('http://127.0.0.1:3000/', (res) => {
@@ -81,7 +81,7 @@ fastify.get('/', (req, reply) => {
   })
 })
 
-fastify.listen(3000, (err) => {
+fastify.listen({ port: 3000 }, (err) => {
   if (err) throw err
 })
 ```
