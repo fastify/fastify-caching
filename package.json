@@ -1,6 +1,6 @@
 {
   "name": "@fastify/caching",
-  "version": "8.0.0",
+  "version": "8.0.1",
   "description": "A plugin for Fastify to enable management of cache control headers",
   "main": "plugin.js",
   "types": "plugin.d.ts",
@@ -34,7 +34,7 @@
   "homepage": "https://github.com/fastify/fastify-caching#readme",
   "devDependencies": {
     "@types/node": "^17.0.21",
-    "fastify": "^4.0.0-rc.2",
+    "fastify": "^4.0.0-rc.3",
     "pre-commit": "^1.2.2",
     "snazzy": "^9.0.0",
     "standard": "^17.0.0",
