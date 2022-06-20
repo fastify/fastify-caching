@@ -33,7 +33,7 @@
   },
   "homepage": "https://github.com/fastify/fastify-caching#readme",
   "devDependencies": {
-    "@types/node": "^17.0.21",
+    "@types/node": "^18.0.0",
     "fastify": "^4.0.0-rc.3",
     "pre-commit": "^1.2.2",
     "snazzy": "^9.0.0",
