@@ -5,7 +5,7 @@
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://standardjs.com/)
 
 *@fastify/caching* is a plugin for the [Fastify](http://fastify.io/) framework
-that provides mechanisms for manipulating HTTP cache headers according to
+that provides server-side caching and mechanisms for manipulating HTTP cache headers according to
 [RFC 2616 §14.9](https://tools.ietf.org/html/rfc2616#section-14.9).
 
 Supports Fastify versions ^3.0.0. Version v5.x supports Fastify ^3.0.0 in
