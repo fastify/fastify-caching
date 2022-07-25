@@ -64,7 +64,7 @@ const redis = new IORedis({host: '127.0.0.1'})
 const abcache = require('abstract-cache')({
   useAwait: false,
   driver: {
-    name: 'abstract-cache-redis', // must be installed via `npm install`
+    name: 'abstract-cache-redis', // must be installed via `npm i`
     options: {client: redis}
   }
 })
