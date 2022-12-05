@@ -2,7 +2,7 @@
 
 const { test } = require('tap')
 const Fastify = require('fastify')
-const plugin = require('../plugin')
+const plugin = require('..')
 
 test('decorators get added', async (t) => {
   t.plan(1)

@@ -1,7 +1,7 @@
 'use strict'
 
 const { test } = require('tap')
-const plugin = require('../plugin')
+const plugin = require('..')
 
 const Fastify = require('fastify')
 
