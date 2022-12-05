@@ -53,7 +53,7 @@ function etagOnSend (req, res, payload, next) {
   )
 }
 
-function fastifyCachingPlugin (instance, options, next) {
+function fastifyCaching (instance, options, next) {
   let _options
   if (Function.prototype.isPrototypeOf(options)) {
     _options = Object.assign({}, defaultOptions)
@@ -92,10 +92,12 @@ function fastifyCachingPlugin (instance, options, next) {
   next()
 }
 
-module.exports = fp(fastifyCachingPlugin, {
+module.exports = fp(fastifyCaching, {
   fastify: '4.x',
   name: '@fastify/caching'
 })
+module.exports.default = fastifyCaching
+module.exports.fastifyCaching = fastifyCaching
 
 module.exports.privacy = {
   NOCACHE: 'no-cache',
