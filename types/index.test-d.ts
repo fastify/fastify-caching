@@ -3,7 +3,7 @@ import { expectAssignable, expectError, expectType } from 'tsd';
 import fastifyCaching, {
   AbstractCacheCompliantObject,
   FastifyCachingPluginOptions,
-} from '../..';
+} from '..';
 
 const fastify = Fastify({ logger: true });
 

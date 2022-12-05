@@ -2,8 +2,8 @@
   "name": "@fastify/caching",
   "version": "8.0.1",
   "description": "A plugin for Fastify to enable management of cache control headers",
-  "main": "plugin.js",
-  "types": "plugin.d.ts",
+  "main": "index.js",
+  "types": "types/index.d.ts",
   "scripts": {
     "lint": "standard --verbose | snazzy",
     "test": "npm run test:unit && npm run test:typescript",
@@ -44,9 +44,6 @@
     "abstract-cache": "^1.0.1",
     "fastify-plugin": "^4.0.0",
     "uid-safe": "^2.1.5"
-  },
-  "tsd": {
-    "directory": "test/types"
   },
   "publishConfig": {
     "access": "public"
