@@ -6,12 +6,11 @@
   "types": "plugin.d.ts",
   "scripts": {
     "lint": "standard --verbose | snazzy",
-    "lint:ci": "standard",
-    "test": "npm run unit && npm run test:types",
-    "test:types": "tsd",
-    "unit": "tap -J \"test/*.test.js\"",
-    "unit:report": "npm run unit -- --coverage-report=html",
-    "unit:verbose": "npm run unit -- -Rspec"
+    "test": "npm run test:unit && npm run test:typescript",
+    "test:typescript": "tsd",
+    "test:unit": "tap",
+    "test:unit:report": "npm run test:unit -- --coverage-report=html",
+    "test:unit:verbose": "npm run test:unit -- -Rspec"
   },
   "precommit": [
     "lint",
@@ -51,5 +50,9 @@
   },
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "pre-commit": [
+    "lint",
+    "test"
+  ]
 }
