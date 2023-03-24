@@ -2,7 +2,6 @@
 
 const { test } = require('tap')
 const Fastify = require('fastify')
-const fp = require('fastify-plugin')
 const plugin = require('..')
 
 test('decorators get added', async (t) => {
@@ -150,11 +149,9 @@ test('do not set headers if another upstream plugin already sets it', async (t) 
   }
 
   const fastify = Fastify()
-  await fastify.register(fp(async (fastify, opts) => {
-    fastify.addHook('onRequest', async (req, reply) => {
-      reply.header('cache-control', 'do not override')
-    })
-  }))
+  fastify.addHook('onRequest', async (req, reply) => {
+    reply.header('cache-control', 'do not override')
+  })
   await fastify.register(plugin, opts)
 
   fastify.get('/', (req, reply) => {
