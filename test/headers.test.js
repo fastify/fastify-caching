@@ -2,6 +2,7 @@
 
 const { test } = require('tap')
 const Fastify = require('fastify')
+const fp = require('fastify-plugin')
 const plugin = require('..')
 
 test('decorators get added', async (t) => {
@@ -137,6 +138,37 @@ test('sets public with max-age and s-maxage header', async (t) => {
   })
   t.ok(response.headers['cache-control'])
   t.equal(response.headers['cache-control'], 'public, max-age=300, s-maxage=12345')
+})
+
+test('do not set headers if another upstream plugin already sets it', async (t) => {
+  t.plan(2)
+
+  const opts = {
+    privacy: plugin.privacy.PUBLIC,
+    expiresIn: 300,
+    serverExpiresIn: 12345
+  }
+
+  const fastify = Fastify()
+  await fastify.register(fp(async (fastify, opts) => {
+    fastify.addHook('onRequest', async (req, reply) => {
+      reply.header('cache-control', 'do not override')
+    })
+  }))
+  await fastify.register(plugin, opts)
+
+  fastify.get('/', (req, reply) => {
+    reply.send({ hello: 'world' })
+  })
+
+  await fastify.ready()
+
+  const response = await fastify.inject({
+    method: 'GET',
+    path: '/'
+  })
+  t.ok(response.headers['cache-control'])
+  t.equal(response.headers['cache-control'], 'do not override')
 })
 
 test('only sets max-age and ignores s-maxage with private header', async (t) => {
