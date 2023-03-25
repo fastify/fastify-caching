@@ -75,7 +75,7 @@ function fastifyCaching (instance, options, next) {
     }
 
     instance.addHook('onRequest', (req, res, next) => {
-      if (!res.getHeader('Cache-control')) {
+      if (!res.hasHeader('Cache-control')) {
         res.header('Cache-control', value)
       }
       next()
