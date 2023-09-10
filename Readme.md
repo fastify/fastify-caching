@@ -30,7 +30,7 @@ This example shows using the plugin to disable client side caching of all
 routes.
 
 ```js
-const http = require('http')
+const http = require('node:http')
 const fastify = require('fastify')()
 const fastifyCaching = require('@fastify/caching')
 
