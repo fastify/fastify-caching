@@ -3,7 +3,7 @@
 /* eslint no-prototype-builtins: 0 */
 
 const fp = require('fastify-plugin')
-const uidSafe = require('uid-safe')
+const { sync } = require('uid-safe')
 const abstractCache = require('abstract-cache')
 
 const defaultOptions = {
@@ -21,11 +21,7 @@ function cachingExpires (date) {
 }
 
 function etag (value, lifetime) {
-  if (value) {
-    this.header('ETag', value)
-  } else {
-    this.header('ETag', uidSafe.sync(18))
-  }
+  this.header('ETag', value ?? sync(18))
   this._etagLife = Number.isInteger(lifetime) ? lifetime : 3600000
   return this
 }
@@ -35,7 +31,7 @@ function etagHandleRequest (req, res, next) {
   const etag = req.headers['if-none-match']
   this.cache.get({ id: etag, segment: this.cacheSegment }, (err, cached) => {
     if (err) return next(err)
-    if (cached && cached.item) {
+    if (cached?.item) {
       return res.status(304).send()
     }
     next()
