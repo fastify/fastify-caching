@@ -21,7 +21,7 @@ function cachingExpires (date) {
 }
 
 function etag (value, lifetime) {
-  this.header('ETag', value ?? sync(18))
+  this.header('ETag', value || sync(18))
   this._etagLife = Number.isInteger(lifetime) ? lifetime : 3600000
   return this
 }
@@ -71,7 +71,7 @@ function fastifyCaching (instance, options, next) {
     }
 
     instance.addHook('onRequest', (req, res, next) => {
-      if (res.hasHeader('Cache-control') === false) {
+      if (!res.hasHeader('Cache-control')) {
         res.header('Cache-control', value)
       }
       next()
