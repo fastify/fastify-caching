@@ -3,6 +3,7 @@
   "version": "8.3.0",
   "description": "A plugin for Fastify to enable management of cache control headers",
   "main": "index.js",
+  "type": "commonjs",
   "types": "types/index.d.ts",
   "scripts": {
     "lint": "standard --verbose | snazzy",
