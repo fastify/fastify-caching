@@ -55,13 +55,13 @@ fastify.get('/three', async (request, reply) => {
   expectType<unknown>(
     fastify.cache.get('well-known')
   );
-  expectAssignable<Promise<{ item: string | null; stored: number; ttl: number; }>>(
+  expectAssignable<Promise<{ item: string; stored: number; ttl: number; } | null>>(
     fastify.cache.get<string>('well-known')
   );
   expectType<void>(
     fastify.cache.get<string>('well-known', (err, value) => {
       expectType<unknown>(err);
-      expectAssignable<{ item: string | null; stored: number; ttl: number; }>(value);
+      expectAssignable<{ item: string; stored: number; ttl: number; } | null>(value);
     })
   );
 
