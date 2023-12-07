@@ -40,10 +40,13 @@ declare namespace fastifyCaching {
    * @link [`abstract-cache` protocol documentation](https://github.com/jsumners/abstract-cache#protocol)
    */
   export interface AbstractCacheCompliantObject {
-    get(
+    get<T = unknown>(
       key: string | { id: string; segment: string },
-      callback?: (error: unknown, result: unknown) => void
+      callback: (error: unknown, result: (T | undefined)) => void
     ): void;
+    get<T = unknown>(
+      key: string | { id: string; segment: string },
+    ): (T | undefined);
     set(
       key: string | { id: string; segment: string },
       value: unknown,
