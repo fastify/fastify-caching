@@ -35,11 +35,11 @@ type FastifyCaching = FastifyPluginCallback<fastifyCaching.FastifyCachingPluginO
   privacy: fastifyCaching.Privacy;
 };
 
-type UseAwaitCacheResult<T> = {
-  item: T | null,
+type CacheResult<T> = {
+  item: T,
   stored: number,
   ttl: number,
-};
+} | null;
 
 declare namespace fastifyCaching {
   /**
@@ -48,7 +48,7 @@ declare namespace fastifyCaching {
   export interface AbstractCacheCompliantObject {
     get<T = unknown>(
       key: string | { id: string; segment: string },
-      callback: (error: unknown, result: UseAwaitCacheResult<T>) => void
+      callback: (error: unknown, result: CacheResult<T>) => void
     ): void;
     /**
      * If AbstractCache is using useAwait = true, then this method-header must be used.
@@ -56,7 +56,7 @@ declare namespace fastifyCaching {
      */
     get<T = unknown>(
       key: string | { id: string; segment: string },
-    ): Promise<UseAwaitCacheResult<T>>;
+    ): Promise<CacheResult<T>>;
     set(
       key: string | { id: string; segment: string },
       value: unknown,
