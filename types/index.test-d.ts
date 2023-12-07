@@ -52,7 +52,7 @@ const badCachingOptions = {
 expectError(shouldErrorApp.register(fastifyCaching, badCachingOptions));
 
 fastify.get('/three', async (request, reply) => {
-  expectType<unknown>(
+  expectAssignable<Promise<unknown>>(
     fastify.cache.get('well-known')
   );
   expectAssignable<Promise<{ item: string; stored: number; ttl: number; } | null>>(
