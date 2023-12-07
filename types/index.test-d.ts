@@ -50,3 +50,20 @@ const badCachingOptions = {
 };
 
 expectError(shouldErrorApp.register(fastifyCaching, badCachingOptions));
+
+fastify.get('/three', async (request, reply) => {
+  expectAssignable<Promise<unknown>>(
+    fastify.cache.get('well-known')
+  );
+  expectAssignable<Promise<{ item: string; stored: number; ttl: number; } | null>>(
+    fastify.cache.get<string>('well-known')
+  );
+  expectType<void>(
+    fastify.cache.get<string>('well-known', (err, value) => {
+      expectType<unknown>(err);
+      expectAssignable<{ item: string; stored: number; ttl: number; } | null>(value);
+    })
+  );
+
+  return { message: 'two' };
+});
