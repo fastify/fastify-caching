@@ -34,13 +34,13 @@
   },
   "homepage": "https://github.com/fastify/fastify-caching#readme",
   "devDependencies": {
-    "@fastify/pre-commit": "^2.0.2",
-    "@types/node": "^20.6.1",
-    "fastify": "^4.23.2",
+    "@fastify/pre-commit": "^2.1.0",
+    "@types/node": "^20.11.30",
+    "fastify": "^4.26.2",
     "snazzy": "^9.0.0",
     "standard": "^17.1.0",
-    "tap": "^16.3.8",
-    "tsd": "^0.30.0"
+    "tap": "^18.7.1",
+    "tsd": "^0.30.7"
   },
   "dependencies": {
     "abstract-cache": "^1.0.1",
