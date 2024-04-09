@@ -42,7 +42,7 @@ function etagOnSend (req, res, payload, next) {
   const etag = res.getHeader('etag')
   if (!etag || !res._etagLife) return next()
   this.cache.set(
-    { id: etag, segment: this.cacheSegment },
+    { id: etag, segment: this.cacheSegment.toString() },
     true,
     res._etagLife,
     (err) => next(err, payload)
