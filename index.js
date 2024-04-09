@@ -29,7 +29,7 @@ function etag (value, lifetime) {
 function etagHandleRequest (req, res, next) {
   if (!req.headers['if-none-match']) return next()
   const etag = req.headers['if-none-match']
-  this.cache.get({ id: etag, segment: this.cacheSegment }, (err, cached) => {
+  this.cache.get({ id: etag, segment: this.cacheSegment.toString() }, (err, cached) => {
     if (err) return next(err)
     if (cached?.item) {
       return res.status(304).send()
