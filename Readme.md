@@ -75,7 +75,7 @@ fastify
   .register(require('@fastify/caching'), {cache: abcache})
 
 fastify.get('/', (req, reply) => {
-  fastify.cache.set('hello', {hello: 'world'}, 10000, (err) => {
+  fastify.cache.set('hello', {hello: 'world'}, '10000', (err) => {
     if (err) return reply.send(err)
     reply.send({hello: 'world'})
   })
