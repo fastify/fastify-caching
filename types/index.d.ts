@@ -52,7 +52,7 @@ declare namespace fastifyCaching {
     ): void;
     /**
      * If AbstractCache is using useAwait = true, then this method-header must be used.
-     * @param key 
+     * @param key
      */
     get<T = unknown>(
       key: string | { id: string; segment: string },
@@ -130,9 +130,8 @@ declare namespace fastifyCaching {
     serverExpiresIn?: number;
   }
 
-  export const privacy: {
-    privacy: Privacy;
-  };
+  export const privacy: Privacy;
+
   export const fastifyCaching: FastifyCaching;
   export { fastifyCaching as default };
 }
