@@ -1,6 +1,6 @@
 {
   "name": "@fastify/caching",
-  "version": "8.3.0",
+  "version": "8.4.0",
   "description": "A plugin for Fastify to enable management of cache control headers",
   "main": "index.js",
   "type": "commonjs",
@@ -40,7 +40,7 @@
     "snazzy": "^9.0.0",
     "standard": "^17.1.0",
     "tap": "^18.7.0",
-    "tsd": "^0.30.7"
+    "tsd": "^0.31.0"
   },
   "dependencies": {
     "abstract-cache": "^1.0.1",
