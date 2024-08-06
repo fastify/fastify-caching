@@ -91,7 +91,7 @@ function fastifyCaching (instance, options, next) {
 }
 
 module.exports = fp(fastifyCaching, {
-  fastify: '4.x',
+  fastify: '5.x',
   name: '@fastify/caching'
 })
 module.exports.default = fastifyCaching
