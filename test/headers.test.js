@@ -1,6 +1,6 @@
 'use strict'
 
-const { test } = require('tap')
+const { test } = require('node:test')
 const Fastify = require('fastify')
 const plugin = require('..')
 
@@ -11,7 +11,7 @@ test('decorators get added', async (t) => {
   await fastify.register(plugin)
 
   fastify.get('/', (req, reply) => {
-    t.ok(reply.etag)
+    t.assert.ok(reply.etag)
     reply.send()
   })
 
@@ -32,9 +32,7 @@ test('decorators add headers', async (t) => {
   await fastify.register(plugin)
 
   fastify.get('/', (req, reply) => {
-    reply
-      .etag(tag)
-      .send()
+    reply.etag(tag).send()
   })
 
   await fastify.ready()
@@ -43,8 +41,8 @@ test('decorators add headers', async (t) => {
     method: 'GET',
     path: '/'
   })
-  t.ok(response.headers.etag)
-  t.equal(response.headers.etag, tag)
+  t.assert.ok(response.headers.etag)
+  t.assert.strictEqual(response.headers.etag, tag)
 })
 
 test('sets etag header for falsy argument', async (t) => {
@@ -54,9 +52,7 @@ test('sets etag header for falsy argument', async (t) => {
   await fastify.register(plugin)
 
   fastify.get('/', (req, reply) => {
-    reply
-      .etag()
-      .send()
+    reply.etag().send()
   })
 
   await fastify.ready()
@@ -65,7 +61,7 @@ test('sets etag header for falsy argument', async (t) => {
     method: 'GET',
     path: '/'
   })
-  t.ok(response.headers.etag)
+  t.assert.ok(response.headers.etag)
 })
 
 test('sets no-cache header', async (t) => {
@@ -84,8 +80,8 @@ test('sets no-cache header', async (t) => {
     method: 'GET',
     path: '/'
   })
-  t.ok(response.headers['cache-control'])
-  t.equal(response.headers['cache-control'], 'no-cache')
+  t.assert.ok(response.headers['cache-control'])
+  t.assert.strictEqual(response.headers['cache-control'], 'no-cache')
 })
 
 test('sets private with max-age header', async (t) => {
@@ -109,8 +105,11 @@ test('sets private with max-age header', async (t) => {
     method: 'GET',
     path: '/'
   })
-  t.ok(response.headers['cache-control'])
-  t.equal(response.headers['cache-control'], 'private, max-age=300')
+  t.assert.ok(response.headers['cache-control'])
+  t.assert.strictEqual(
+    response.headers['cache-control'],
+    'private, max-age=300'
+  )
 })
 
 test('sets public with max-age and s-maxage header', async (t) => {
@@ -135,8 +134,11 @@ test('sets public with max-age and s-maxage header', async (t) => {
     method: 'GET',
     path: '/'
   })
-  t.ok(response.headers['cache-control'])
-  t.equal(response.headers['cache-control'], 'public, max-age=300, s-maxage=12345')
+  t.assert.ok(response.headers['cache-control'])
+  t.assert.strictEqual(
+    response.headers['cache-control'],
+    'public, max-age=300, s-maxage=12345'
+  )
 })
 
 test('do not set headers if another upstream plugin already sets it', async (t) => {
@@ -164,8 +166,8 @@ test('do not set headers if another upstream plugin already sets it', async (t) 
     method: 'GET',
     path: '/'
   })
-  t.ok(response.headers['cache-control'])
-  t.equal(response.headers['cache-control'], 'do not override')
+  t.assert.ok(response.headers['cache-control'])
+  t.assert.strictEqual(response.headers['cache-control'], 'do not override')
 })
 
 test('only sets max-age and ignores s-maxage with private header', async (t) => {
@@ -190,8 +192,11 @@ test('only sets max-age and ignores s-maxage with private header', async (t) => 
     method: 'GET',
     path: '/'
   })
-  t.ok(response.headers['cache-control'])
-  t.equal(response.headers['cache-control'], 'private, max-age=300')
+  t.assert.ok(response.headers['cache-control'])
+  t.assert.strictEqual(
+    response.headers['cache-control'],
+    'private, max-age=300'
+  )
 })
 
 test('s-maxage is optional with public header', async (t) => {
@@ -215,8 +220,8 @@ test('s-maxage is optional with public header', async (t) => {
     method: 'GET',
     path: '/'
   })
-  t.ok(response.headers['cache-control'])
-  t.equal(response.headers['cache-control'], 'public, max-age=300')
+  t.assert.ok(response.headers['cache-control'])
+  t.assert.strictEqual(response.headers['cache-control'], 'public, max-age=300')
 })
 
 test('sets no-store with max-age header', async (t) => {
@@ -235,8 +240,11 @@ test('sets no-store with max-age header', async (t) => {
     method: 'GET',
     path: '/'
   })
-  t.ok(response.headers['cache-control'])
-  t.equal(response.headers['cache-control'], 'no-store, max-age=300')
+  t.assert.ok(response.headers['cache-control'])
+  t.assert.strictEqual(
+    response.headers['cache-control'],
+    'no-store, max-age=300'
+  )
 })
 
 test('sets the expires header', async (t) => {
@@ -248,9 +256,7 @@ test('sets the expires header', async (t) => {
   await fastify.register(plugin, { privacy: plugin.privacy.NOCACHE })
 
   fastify.get('/', (req, reply) => {
-    reply
-      .expires(now)
-      .send({ hello: 'world' })
+    reply.expires(now).send({ hello: 'world' })
   })
 
   await fastify.ready()
@@ -259,8 +265,8 @@ test('sets the expires header', async (t) => {
     method: 'GET',
     path: '/'
   })
-  t.ok(response.headers.expires)
-  t.equal(response.headers.expires, now.toUTCString())
+  t.assert.ok(response.headers.expires)
+  t.assert.strictEqual(response.headers.expires, now.toUTCString())
 })
 
 test('sets the expires header to a falsy value', async (t) => {
@@ -270,9 +276,7 @@ test('sets the expires header to a falsy value', async (t) => {
   await fastify.register(plugin, { privacy: plugin.privacy.NOCACHE })
 
   fastify.get('/', (req, reply) => {
-    reply
-      .expires()
-      .send({ hello: 'world' })
+    reply.expires().send({ hello: 'world' })
   })
 
   await fastify.ready()
@@ -281,7 +285,7 @@ test('sets the expires header to a falsy value', async (t) => {
     method: 'GET',
     path: '/'
   })
-  t.notOk(response.headers.expires)
+  t.assert.ifError(response.headers.expires)
 })
 
 test('sets the expires header to a custom value', async (t) => {
@@ -291,9 +295,7 @@ test('sets the expires header to a custom value', async (t) => {
   await fastify.register(plugin, { privacy: plugin.privacy.NOCACHE })
 
   fastify.get('/', (req, reply) => {
-    reply
-      .expires('foobar')
-      .send({ hello: 'world' })
+    reply.expires('foobar').send({ hello: 'world' })
   })
 
   await fastify.ready()
@@ -302,6 +304,6 @@ test('sets the expires header to a custom value', async (t) => {
     method: 'GET',
     path: '/'
   })
-  t.ok(response.headers.expires)
-  t.equal(response.headers.expires, 'foobar')
+  t.assert.ok(response.headers.expires)
+  t.assert.strictEqual(response.headers.expires, 'foobar')
 })

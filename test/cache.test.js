@@ -1,9 +1,10 @@
 'use strict'
 
-const { test } = require('tap')
+const { test } = require('node:test')
 const plugin = require('..')
 
 const Fastify = require('fastify')
+const { setTimeout: sleep } = require('node:timers/promises')
 
 test('cache property gets added to instance', async (t) => {
   t.plan(2)
@@ -12,8 +13,8 @@ test('cache property gets added to instance', async (t) => {
   await fastify.register(plugin)
   await fastify.ready()
 
-  t.ok(fastify.cache)
-  t.ok(fastify.cache.set)
+  t.assert.ok(fastify.cache)
+  t.assert.ok(fastify.cache.set)
 })
 
 test('cache is usable', async (t) => {
@@ -22,13 +23,13 @@ test('cache is usable', async (t) => {
   const fastify = Fastify()
   await fastify.register(async (instance, options) => {
     instance.addHook('onRequest', async function (req, reply) {
-      t.notOk(instance[Symbol.for('fastify-caching.registered')])
+      t.assert.ifError(instance[Symbol.for('fastify-caching.registered')])
     })
   })
   await fastify.register(plugin)
 
   fastify.addHook('onRequest', async function (req, reply) {
-    t.equal(this[Symbol.for('fastify-caching.registered')], true)
+    t.assert.strictEqual(this[Symbol.for('fastify-caching.registered')], true)
   })
 
   fastify.get('/one', (req, reply) => {
@@ -40,9 +41,8 @@ test('cache is usable', async (t) => {
 
   fastify.get('/two', (req, reply) => {
     fastify.cache.get('one', (err, obj) => {
-      t.error(err)
-      t.same(obj.item, { one: true })
-
+      t.assert.ifError(err)
+      t.assert.strictEqual(obj.item, { one: true })
       reply.send()
     })
   })
@@ -72,13 +72,13 @@ test('cache is usable with function as plugin default options input', async (t) 
   const fastify = Fastify()
   await fastify.register(async (instance, options) => {
     instance.addHook('onRequest', async function (req, reply) {
-      t.notOk(instance[Symbol.for('fastify-caching.registered')])
+      t.assert.failure(instance[Symbol.for('fastify-caching.registered')])
     })
   })
-  await fastify.register(plugin, () => () => { })
+  await fastify.register(plugin, () => () => {})
 
   fastify.addHook('onRequest', async function (req, reply) {
-    t.equal(this[Symbol.for('fastify-caching.registered')], true)
+    t.assert.strictEqual(this[Symbol.for('fastify-caching.registered')], true)
   })
 
   fastify.get('/one', (req, reply) => {
@@ -90,8 +90,8 @@ test('cache is usable with function as plugin default options input', async (t) 
 
   fastify.get('/two', (req, reply) => {
     fastify.cache.get('one', (err, obj) => {
-      t.error(err)
-      t.same(obj.item, { one: true })
+      t.assert.ifError(err)
+      t.assert.strictEqual(obj.item, { one: true })
 
       reply.send()
     })
@@ -130,16 +130,14 @@ test('getting cache item with error returns error', async (t) => {
   fastify.get('/one', (req, reply) => {
     fastify.cache.set('one', { one: true }, 1000, (err) => {
       if (err) return reply.send(err)
-      return reply
-        .etag('123456')
-        .send({ hello: 'world' })
+      return reply.etag('123456').send({ hello: 'world' })
     })
   })
 
   fastify.get('/two', (req, reply) => {
     fastify.cache.get('one', (err, obj) => {
-      t.notOk(err)
-      t.notOk(obj)
+      t.assert.failure(err)
+      t.assert.failure(obj)
     })
   })
 
@@ -157,7 +155,7 @@ test('getting cache item with error returns error', async (t) => {
       'if-none-match': '123456'
     }
   })
-  t.equal(response.statusCode, 500)
+  t.assert.strictEqual(response.statusCode, 500)
 })
 
 test('etags get stored in cache', async (t) => {
@@ -167,9 +165,7 @@ test('etags get stored in cache', async (t) => {
   await fastify.register(plugin)
 
   fastify.get('/one', (req, reply) => {
-    reply
-      .etag('123456')
-      .send({ hello: 'world' })
+    reply.etag('123456').send({ hello: 'world' })
   })
 
   await fastify.ready()
@@ -186,14 +182,14 @@ test('etags get stored in cache', async (t) => {
       'if-none-match': '123456'
     }
   })
-  t.equal(response.statusCode, 304)
+  t.assert.strictEqual(response.statusCode, 304)
 })
 
-test('etag cache life is customizable', (t) => {
+test('etag cache life is customizable', async (t) => {
   t.plan(4)
 
   const fastify = Fastify()
-  fastify.register(plugin)
+  await fastify.register(plugin)
 
   fastify.get('/one', function (req, reply) {
     reply
@@ -203,29 +199,36 @@ test('etag cache life is customizable', (t) => {
   })
 
   fastify.ready((err) => {
-    t.error(err)
+    t.assert.ifError(err)
 
-    fastify.inject({
-      method: 'GET',
-      path: '/one'
-    }, (err, _response) => {
-      t.error(err)
+    fastify.inject(
+      {
+        method: 'GET',
+        path: '/one'
+      },
+      (err, _response) => {
+        t.assert.ifError(err)
 
-      // We wait 70 milliseconds that the cache expires
-      setTimeout(() => {
-        fastify.inject({
-          method: 'GET',
-          path: '/one',
-          headers: {
-            'if-none-match': '123456'
-          }
-        }, (err, response) => {
-          t.error(err)
-          t.equal(response.statusCode, 200)
-        })
-      }, 70)
-    })
+        // We wait 70 milliseconds that the cache expires
+        setTimeout(() => {
+          fastify.inject(
+            {
+              method: 'GET',
+              path: '/one',
+              headers: {
+                'if-none-match': '123456'
+              }
+            },
+            (err, response) => {
+              t.assert.ifError(err)
+              t.assert.strictEqual(response.statusCode, 200)
+            }
+          )
+        }, 70)
+      }
+    )
   })
+  await sleep(100)
 })
 
 test('returns response payload', async (t) => {
@@ -235,9 +238,7 @@ test('returns response payload', async (t) => {
   await fastify.register(plugin)
 
   fastify.get('/one', (req, reply) => {
-    reply
-      .etag('123456', 300)
-      .send({ hello: 'world' })
+    reply.etag('123456', 300).send({ hello: 'world' })
   })
 
   await fastify.ready()
@@ -252,5 +253,5 @@ test('returns response payload', async (t) => {
     path: '/one'
   })
 
-  t.same(JSON.parse(response.payload), { hello: 'world' })
+  t.assert.deepStrictEqual(JSON.parse(response.payload), { hello: 'world' })
 })
