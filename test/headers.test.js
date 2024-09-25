@@ -151,7 +151,7 @@ test('do not set headers if another upstream plugin already sets it', async (t) 
   }
 
   const fastify = Fastify()
-  fastify.addHook('onRequest', async (req, reply) => {
+  fastify.addHook('onRequest', async function checkCachingDoesNotOverrideCacheControlHeader (req, reply) {
     reply.header('cache-control', 'do not override')
   })
   await fastify.register(plugin, opts)

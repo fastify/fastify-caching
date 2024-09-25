@@ -26,7 +26,7 @@ function etag (value, lifetime) {
   return this
 }
 
-function etagHandleRequest (req, res, next) {
+function cachingLoadByEtag (req, res, next) {
   if (!req.headers['if-none-match']) return next()
   const etag = req.headers['if-none-match']
   this.cache.get({ id: etag, segment: this.cacheSegment }, (err, cached) => {
@@ -38,7 +38,7 @@ function etagHandleRequest (req, res, next) {
   })
 }
 
-function etagOnSend (req, res, payload, next) {
+function cachingStoreByEtag (req, res, payload, next) {
   const etag = res.getHeader('etag')
   if (!etag || !res._etagLife) return next()
   this.cache.set(
@@ -70,7 +70,7 @@ function fastifyCaching (instance, options, next) {
       value += `, s-maxage=${_options.serverExpiresIn}`
     }
 
-    instance.addHook('onRequest', (req, res, next) => {
+    instance.addHook('onRequest', function cachingSetCacheControlHeader (req, res, next) {
       if (!res.hasHeader('Cache-control')) {
         res.header('Cache-control', value)
       }
@@ -83,8 +83,8 @@ function fastifyCaching (instance, options, next) {
   instance.decorate('etagMaxLife', _options.etagMaxLife)
   instance.decorateReply('etag', etag)
   instance.decorateReply('expires', cachingExpires)
-  instance.addHook('onRequest', etagHandleRequest)
-  instance.addHook('onSend', etagOnSend)
+  instance.addHook('onRequest', cachingLoadByEtag)
+  instance.addHook('onSend', cachingStoreByEtag)
 
   instance[Symbol.for('fastify-caching.registered')] = true
   next()

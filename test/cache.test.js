@@ -22,13 +22,13 @@ test('cache is usable', async (t) => {
 
   const fastify = Fastify()
   await fastify.register(async (instance, options) => {
-    instance.addHook('onRequest', async function (req, reply) {
+    instance.addHook('onRequest', async function checkCachingRegistered (req, reply) {
       t.assert.ifError(instance[Symbol.for('fastify-caching.registered')])
     })
   })
   await fastify.register(plugin)
 
-  fastify.addHook('onRequest', async function (req, reply) {
+  fastify.addHook('onRequest', async function checkCachingRegistered (req, reply) {
     t.assert.strictEqual(this[Symbol.for('fastify-caching.registered')], true)
   })
 
@@ -71,13 +71,13 @@ test('cache is usable with function as plugin default options input', async (t) 
 
   const fastify = Fastify()
   await fastify.register(async (instance, options) => {
-    instance.addHook('onRequest', async function (req, reply) {
+    instance.addHook('onRequest', async function checkCachingNotRegistered (req, reply) {
       t.assert.failure(instance[Symbol.for('fastify-caching.registered')])
     })
   })
   await fastify.register(plugin, () => () => {})
 
-  fastify.addHook('onRequest', async function (req, reply) {
+  fastify.addHook('onRequest', async function checkCachingRegistered (req, reply) {
     t.assert.strictEqual(this[Symbol.for('fastify-caching.registered')], true)
   })
 
