@@ -1,6 +1,6 @@
 /// <reference types='node' />
 
-import { FastifyPluginCallback } from 'fastify';
+import { FastifyPluginCallback } from 'fastify'
 
 declare module 'fastify' {
   interface FastifyInstance {
@@ -33,13 +33,13 @@ declare module 'fastify' {
 
 type FastifyCaching = FastifyPluginCallback<fastifyCaching.FastifyCachingPluginOptions> & {
   privacy: fastifyCaching.Privacy;
-};
+}
 
 type CacheResult<T> = {
   item: T,
   stored: number,
   ttl: number,
-} | null;
+} | null
 
 declare namespace fastifyCaching {
   /**
@@ -130,11 +130,11 @@ declare namespace fastifyCaching {
     serverExpiresIn?: number;
   }
 
-  export const privacy: Privacy;
+  export const privacy: Privacy
 
-  export const fastifyCaching: FastifyCaching;
-  export { fastifyCaching as default };
+  export const fastifyCaching: FastifyCaching
+  export { fastifyCaching as default }
 }
 
-declare function fastifyCaching(...params: Parameters<FastifyCaching>): ReturnType<FastifyCaching>
+declare function fastifyCaching (...params: Parameters<FastifyCaching>): ReturnType<FastifyCaching>
 export = fastifyCaching
