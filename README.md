@@ -8,9 +8,6 @@
 that provides server-side caching and mechanisms for manipulating HTTP cache headers according to
 [RFC 2616 §14.9](https://tools.ietf.org/html/rfc2616#section-14.9).
 
-Supports Fastify versions ^3.0.0. Version v5.x supports Fastify ^3.0.0 in
-the [`v5.x` branch](https://github.com/fastify/fastify-caching/tree/v5.x).
-
 This plugin fully supports Fastify's encapsulation. Therefore, routes that
 should have differing cache settings should be registered within different
 contexts.
@@ -23,6 +20,25 @@ recommended that a full featured cache object be supplied, e.g.
 [abstract-cache-redis][acache-redis].
 
 [acache-redis]: https://www.npmjs.com/package/abstract-cache-redis
+
+## Install
+```
+npm i @fastify/caching
+```
+
+### Compatibility
+| Plugin version | Fastify version |
+| ---------------|-----------------|
+| `^9.x`         | `^5.x`          |
+| `^8.x`         | `^4.x`          |
+| `^6.x`         | `^3.x`          |
+| `^4.x`         | `^2.x`          |
+| `^1.x`         | `^1.x`          |
+
+
+Please note that if a Fastify version is out of support, then so are the corresponding versions of this plugin
+in the table above.
+See [Fastify's LTS policy](https://github.com/fastify/fastify/blob/main/docs/Reference/LTS.md) for more details.
 
 ## Example
 
@@ -149,4 +165,4 @@ object, or a string that is a valid date string according to
 
 ## License
 
-[MIT License](https://jsumners.mit-license.org/)
+Licensed under [MIT](./LICENSE).
