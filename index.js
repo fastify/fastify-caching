@@ -38,7 +38,7 @@ function cachingLoadByEtag (req, res, next) {
   })
 }
 
-function cachingStoreByEtag (req, res, payload, next) {
+function cachingStoreByEtag (_req, res, payload, next) {
   const etag = res.getHeader('etag')
   if (!etag || !res._etagLife) return next()
   this.cache.set(
@@ -70,7 +70,7 @@ function fastifyCaching (instance, options, next) {
       value += `, s-maxage=${_options.serverExpiresIn}`
     }
 
-    instance.addHook('onRequest', function cachingSetCacheControlHeader (req, res, next) {
+    instance.addHook('onRequest', function cachingSetCacheControlHeader (_req, res, next) {
       if (!res.hasHeader('Cache-control')) {
         res.header('Cache-control', value)
       }

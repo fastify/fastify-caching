@@ -21,25 +21,25 @@ test('cache is usable', async (t) => {
   t.plan(4)
 
   const fastify = Fastify()
-  await fastify.register(async (instance, options) => {
-    instance.addHook('onRequest', async function checkCachingRegistered (req, reply) {
+  await fastify.register(async (instance) => {
+    instance.addHook('onRequest', async function checkCachingRegistered () {
       t.assert.ifError(instance[Symbol.for('fastify-caching.registered')])
     })
   })
   await fastify.register(plugin)
 
-  fastify.addHook('onRequest', async function checkCachingRegistered (req, reply) {
+  fastify.addHook('onRequest', async function checkCachingRegistered () {
     t.assert.strictEqual(this[Symbol.for('fastify-caching.registered')], true)
   })
 
-  fastify.get('/one', (req, reply) => {
+  fastify.get('/one', (_req, reply) => {
     fastify.cache.set('one', { one: true }, 1000, (err) => {
       if (err) return reply.send(err)
       reply.redirect('/two')
     })
   })
 
-  fastify.get('/two', (req, reply) => {
+  fastify.get('/two', (_req, reply) => {
     fastify.cache.get('one', (err, obj) => {
       t.assert.ifError(err)
       t.assert.strictEqual(obj.item, { one: true })
@@ -70,25 +70,25 @@ test('cache is usable with function as plugin default options input', async (t) 
   t.plan(4)
 
   const fastify = Fastify()
-  await fastify.register(async (instance, options) => {
-    instance.addHook('onRequest', async function checkCachingNotRegistered (req, reply) {
+  await fastify.register(async (instance) => {
+    instance.addHook('onRequest', async function checkCachingNotRegistered () {
       t.assert.failure(instance[Symbol.for('fastify-caching.registered')])
     })
   })
   await fastify.register(plugin, () => () => {})
 
-  fastify.addHook('onRequest', async function checkCachingRegistered (req, reply) {
+  fastify.addHook('onRequest', async function checkCachingRegistered () {
     t.assert.strictEqual(this[Symbol.for('fastify-caching.registered')], true)
   })
 
-  fastify.get('/one', (req, reply) => {
+  fastify.get('/one', (_req, reply) => {
     fastify.cache.set('one', { one: true }, 1000, (err) => {
       if (err) return reply.send(err)
       reply.redirect('/two')
     })
   })
 
-  fastify.get('/two', (req, reply) => {
+  fastify.get('/two', (_req, reply) => {
     fastify.cache.get('one', (err, obj) => {
       t.assert.ifError(err)
       t.assert.strictEqual(obj.item, { one: true })
@@ -120,21 +120,21 @@ test('getting cache item with error returns error', async (t) => {
   t.plan(1)
 
   const mockCache = {
-    get: (info, callback) => callback(new Error('cache.get always errors')),
-    set: (key, value, ttl, callback) => callback()
+    get: (_info, callback) => callback(new Error('cache.get always errors')),
+    set: (_key, _value, _ttl, callback) => callback()
   }
 
   const fastify = Fastify()
   await fastify.register(plugin, { cache: mockCache })
 
-  fastify.get('/one', (req, reply) => {
+  fastify.get('/one', (_req, reply) => {
     fastify.cache.set('one', { one: true }, 1000, (err) => {
       if (err) return reply.send(err)
       return reply.etag('123456').send({ hello: 'world' })
     })
   })
 
-  fastify.get('/two', (req, reply) => {
+  fastify.get('/two', () => {
     fastify.cache.get('one', (err, obj) => {
       t.assert.failure(err)
       t.assert.failure(obj)
@@ -164,7 +164,7 @@ test('etags get stored in cache', async (t) => {
   const fastify = Fastify()
   await fastify.register(plugin)
 
-  fastify.get('/one', (req, reply) => {
+  fastify.get('/one', (_req, reply) => {
     reply.etag('123456').send({ hello: 'world' })
   })
 
@@ -191,7 +191,7 @@ test('etag cache life is customizable', async (t) => {
   const fastify = Fastify()
   await fastify.register(plugin)
 
-  fastify.get('/one', function (req, reply) {
+  fastify.get('/one', function (_req, reply) {
     reply
       // We set a cache lifetime of 50 milliseconds
       .etag('123456', 50)
@@ -237,7 +237,7 @@ test('returns response payload', async (t) => {
   const fastify = Fastify()
   await fastify.register(plugin)
 
-  fastify.get('/one', (req, reply) => {
+  fastify.get('/one', (_req, reply) => {
     reply.etag('123456', 300).send({ hello: 'world' })
   })
 
