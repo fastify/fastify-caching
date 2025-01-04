@@ -22,7 +22,7 @@ expectType<AbstractCacheCompliantObject['set']>(fastify.cache.set)
 expectType<string>(fastify.cacheSegment)
 // expectType<number>(fastify.etagMaxLife);
 
-fastify.get('/one', async (request, reply) => {
+fastify.get('/one', async (_request, reply) => {
   expectType<(tag?: string, timeToLive?: number) => FastifyReply>(reply.etag)
   expectType<(date?: Date) => FastifyReply>(reply.expires)
 
@@ -32,7 +32,7 @@ fastify.get('/one', async (request, reply) => {
   return { message: 'one' }
 })
 
-fastify.get('/two', async (request, reply) => {
+fastify.get('/two', async (_request, reply) => {
   expectType<FastifyReply>(
     reply.etag('hello', 6000).expires(new Date(Date.now() + 6000))
   )
@@ -51,7 +51,7 @@ const badCachingOptions = {
 
 expectError(shouldErrorApp.register(fastifyCaching, badCachingOptions))
 
-fastify.get('/three', async (request, reply) => {
+fastify.get('/three', async () => {
   expectAssignable<Promise<unknown>>(
     fastify.cache.get('well-known')
   )
