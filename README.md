@@ -16,7 +16,7 @@ In addition to providing header manipulation, the plugin also decorates the
 server instance with an object that can be used for caching items. **Note:**
 the default cache should not be used in a "production" environment. It is
 an LRU, in-memory cache that is capped at 100,000 items. It is *highly*
-recommended that a full featured cache object be supplied, e.g.
+recommended that a full-featured cache object be supplied, e.g.
 [abstract-cache-redis][acache-redis].
 
 [acache-redis]: https://www.npmjs.com/package/abstract-cache-redis
@@ -42,7 +42,7 @@ See [Fastify's LTS policy](https://github.com/fastify/fastify/blob/main/docs/Ref
 
 ## Example
 
-This example shows using the plugin to disable client side caching of all
+This example shows using the plugin to disable client-side caching of all
 routes.
 
 ```js
@@ -123,7 +123,7 @@ for a *cache-response-directive* as defined by RFC 2616.
 resource may be cached. When this is set, and `privacy` is not set to `no-cache`,
 then `', max-age=<value>'` will be appended to the `cache-control` header.
 + `cache` (Default: `abstract-cache.memclient`): an [abstract-cache][acache]
-protocol compliant cache object. Note: the plugin requires a cache instance to
+protocol-compliant cache object. Note: the plugin requires a cache instance to
 properly support the ETag mechanism. Therefore, if a falsy value is supplied
 the default will be used.
 + `cacheSegment` (Default: `'@fastify/caching'`): segment identifier to use when
@@ -144,7 +144,7 @@ recommended to always supply a value to this method to avoid this operation.
 All incoming requests to paths affected by this plugin will be inspected for
 the `if-none-match` header. If the header is present, the value will be used
 to lookup the tag within the cache associated with this plugin. If the tag is
-found, then the response will be ended with a 304 status code sent to
+found, then the response will end with a 304 status code sent to
 the client.
 
 Tags will be cached according to the second parameter. If the second parameter
@@ -158,7 +158,7 @@ milliseconds. The default lifetime, when the parameter is not specified, is
 ### `reply.expires(date)`
 
 This method allows setting of the `expires` header. It accepts a regular `Date`
-object, or a string that is a valid date string according to
+object or a string that is a valid date string according to
 [RFC 2616 §14.21][sec14.21].
 
 [sec14.21]: https://tools.ietf.org/html/rfc2616#section-14.21
