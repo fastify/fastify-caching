@@ -29,11 +29,11 @@ npm i @fastify/caching
 ### Compatibility
 | Plugin version | Fastify version |
 | ---------------|-----------------|
-| `^9.x`         | `^5.x`          |
+| `>=9.x`        | `^5.x`          |
 | `^8.x`         | `^4.x`          |
-| `^6.x`         | `^3.x`          |
-| `^4.x`         | `^2.x`          |
-| `^1.x`         | `^1.x`          |
+| `>=6.x <8.x`   | `^3.x`          |
+| `>=4.x <6.x`   | `^2.x`          |
+| `>=1.x <4.x`   | `^1.x`          |
 
 
 Please note that if a Fastify version is out of support, then so are the corresponding versions of this plugin
