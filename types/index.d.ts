@@ -1,5 +1,3 @@
-/// <reference types='node' />
-
 import { FastifyPluginCallback } from 'fastify'
 
 declare module 'fastify' {
