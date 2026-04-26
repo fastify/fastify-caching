@@ -9,7 +9,7 @@
     "lint": "eslint",
     "lint:fix": "eslint --fix",
     "test": "npm run test:unit && npm run test:typescript",
-    "test:typescript": "tsd",
+    "test:typescript": "tstyche",
     "test:unit": "c8 --100 node --test",
     "test:unit:report": "npm run test:unit -- --coverage-report=html",
     "test:unit:verbose": "npm run test:unit -- -Rspec"
@@ -64,7 +64,7 @@
     "eslint": "^9.17.0",
     "fastify": "^5.0.0",
     "neostandard": "^0.13.0",
-    "tsd": "^0.33.0"
+    "tstyche": "^7.0.0"
   },
   "dependencies": {
     "abstract-cache": "^1.0.1",
