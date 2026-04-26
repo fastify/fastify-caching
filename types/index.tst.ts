@@ -53,7 +53,7 @@ expect(shouldErrorApp.register).type.not.toBeCallableWith(fastifyCaching, badCac
 fastify.get('/three', async () => {
   expect(fastify.cache.get('well-known')).type.toBeAssignableTo<Promise<unknown>>()
 
-  expect(fastify.cache.get<string>('well-known')).type.toBeAssignableTo<
+  expect(fastify.cache.get<string>('well-known')).type.toBe<
     Promise<{ item: string; stored: number; ttl: number; } | null>
   >()
 
