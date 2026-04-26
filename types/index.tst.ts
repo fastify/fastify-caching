@@ -59,7 +59,7 @@ fastify.get('/three', async () => {
 
   const result = fastify.cache.get<string>('well-known', (err, value) => {
     expect(err).type.toBe<unknown>()
-    expect(value).type.toBeAssignableTo<{ item: string; stored: number; ttl: number; } | null>()
+    expect(value).type.toBe<{ item: string; stored: number; ttl: number; } | null>()
   })
 
   expect(result).type.toBe<void>()
