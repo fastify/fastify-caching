@@ -247,6 +247,105 @@ test('sets no-store with max-age header', async (t) => {
   )
 })
 
+test('does not cache 5xx error responses', async (t) => {
+  t.plan(2)
+
+  const opts = {
+    privacy: plugin.privacy.PRIVATE,
+    expiresIn: 300
+  }
+
+  const fastify = Fastify()
+  await fastify.register(plugin, opts)
+
+  fastify.get('/', () => {
+    throw new Error('kaboom')
+  })
+
+  await fastify.ready()
+
+  const response = await fastify.inject({
+    method: 'GET',
+    path: '/'
+  })
+  t.assert.strictEqual(response.statusCode, 500)
+  t.assert.strictEqual(response.headers['cache-control'], 'no-store')
+})
+
+test('does not cache 4xx error responses', async (t) => {
+  t.plan(2)
+
+  const opts = {
+    privacy: plugin.privacy.PRIVATE,
+    expiresIn: 300
+  }
+
+  const fastify = Fastify()
+  await fastify.register(plugin, opts)
+
+  fastify.get('/', (_req, reply) => {
+    reply.code(400).send({ error: 'bad request' })
+  })
+
+  await fastify.ready()
+
+  const response = await fastify.inject({
+    method: 'GET',
+    path: '/'
+  })
+  t.assert.strictEqual(response.statusCode, 400)
+  t.assert.strictEqual(response.headers['cache-control'], 'no-store')
+})
+
+test('does not cache framework 404 responses', async (t) => {
+  t.plan(2)
+
+  const opts = {
+    privacy: plugin.privacy.PRIVATE,
+    expiresIn: 300
+  }
+
+  const fastify = Fastify()
+  await fastify.register(plugin, opts)
+
+  await fastify.ready()
+
+  const response = await fastify.inject({
+    method: 'GET',
+    path: '/does-not-exist'
+  })
+  t.assert.strictEqual(response.statusCode, 404)
+  t.assert.strictEqual(response.headers['cache-control'], 'no-store')
+})
+
+test('does not override a Cache-control header set upstream on error responses', async (t) => {
+  t.plan(2)
+
+  const opts = {
+    privacy: plugin.privacy.PRIVATE,
+    expiresIn: 300
+  }
+
+  const fastify = Fastify()
+  fastify.addHook('onRequest', async function presetCacheControl (_req, reply) {
+    reply.header('cache-control', 'private, max-age=10')
+  })
+  await fastify.register(plugin, opts)
+
+  fastify.get('/', () => {
+    throw new Error('kaboom')
+  })
+
+  await fastify.ready()
+
+  const response = await fastify.inject({
+    method: 'GET',
+    path: '/'
+  })
+  t.assert.strictEqual(response.statusCode, 500)
+  t.assert.strictEqual(response.headers['cache-control'], 'private, max-age=10')
+})
+
 test('sets the expires header', async (t) => {
   t.plan(2)
 

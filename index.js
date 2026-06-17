@@ -70,9 +70,16 @@ function fastifyCaching (instance, options, next) {
       value += `, s-maxage=${_options.serverExpiresIn}`
     }
 
-    instance.addHook('onRequest', function cachingSetCacheControlHeader (_req, res, next) {
-      if (!res.hasHeader('Cache-control')) {
-        res.header('Cache-control', value)
+    instance.addHook('onSend', function cachingSetCacheControlHeader (_req, reply, _payload, next) {
+      if (!reply.hasHeader('Cache-control')) {
+        // Only apply the caching value to successful (2xx) responses.
+        // Error responses must not be cached, otherwise browsers may serve
+        // a stale 4xx/5xx for the duration of max-age.
+        if (reply.statusCode >= 200 && reply.statusCode < 300) {
+          reply.header('Cache-control', value)
+        } else {
+          reply.header('Cache-control', 'no-store')
+        }
       }
       next()
     })
