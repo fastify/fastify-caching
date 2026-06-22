@@ -4,7 +4,7 @@
 [![NPM version](https://img.shields.io/npm/v/@fastify/caching.svg?style=flat)](https://www.npmjs.com/package/@fastify/caching)
 [![neostandard javascript style](https://img.shields.io/badge/code_style-neostandard-brightgreen?style=flat)](https://github.com/neostandard/neostandard)
 
-*@fastify/caching* is a plugin for the [Fastify](http://fastify.dev/) framework
+*@fastify/caching* is a plugin for the [Fastify](https://fastify.dev/) framework
 that provides server-side caching and mechanisms for manipulating HTTP cache headers according to
 [RFC 2616 §14.9](https://tools.ietf.org/html/rfc2616#section-14.9).
 
