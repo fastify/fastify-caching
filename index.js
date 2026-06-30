@@ -60,7 +60,7 @@ function fastifyCaching (instance, options, next) {
   if (!_options.cache) _options.cache = abstractCache()
 
   if (_options.privacy) {
-    // https://tools.ietf.org/html/rfc2616#section-14.9.4
+    // https://datatracker.ietf.org/doc/html/rfc2616#section-14.9.4
     let value = _options.privacy
     if (_options.privacy.toLowerCase() !== 'no-cache' && _options.expiresIn) {
       value = `${_options.privacy}, max-age=${_options.expiresIn}`
