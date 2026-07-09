@@ -4,9 +4,9 @@
 [![NPM version](https://img.shields.io/npm/v/@fastify/caching.svg?style=flat)](https://www.npmjs.com/package/@fastify/caching)
 [![neostandard javascript style](https://img.shields.io/badge/code_style-neostandard-brightgreen?style=flat)](https://github.com/neostandard/neostandard)
 
-*@fastify/caching* is a plugin for the [Fastify](http://fastify.dev/) framework
+*@fastify/caching* is a plugin for the [Fastify](https://fastify.dev/) framework
 that provides server-side caching and mechanisms for manipulating HTTP cache headers according to
-[RFC 2616 §14.9](https://tools.ietf.org/html/rfc2616#section-14.9).
+[RFC 2616 §14.9](https://datatracker.ietf.org/doc/html/rfc2616#section-14.9).
 
 This plugin fully supports Fastify's encapsulation. Therefore, routes that
 should have differing cache settings should be registered within different
@@ -161,7 +161,7 @@ This method allows setting of the `expires` header. It accepts a regular `Date`
 object or a string that is a valid date string according to
 [RFC 2616 §14.21][sec14.21].
 
-[sec14.21]: https://tools.ietf.org/html/rfc2616#section-14.21
+[sec14.21]: https://datatracker.ietf.org/doc/html/rfc2616#section-14.21
 
 ## License
 
