@@ -72,10 +72,10 @@ function fastifyCaching (instance, options, next) {
 
     instance.addHook('onSend', function cachingSetCacheControlHeader (_req, reply, _payload, next) {
       if (!reply.hasHeader('Cache-control')) {
-        // Only apply the caching value to successful (2xx) responses.
+        // Only apply the caching value to successful (2xx) and 304 Not Modified responses.
         // Error responses must not be cached, otherwise browsers may serve
         // a stale 4xx/5xx for the duration of max-age.
-        if (reply.statusCode >= 200 && reply.statusCode < 300) {
+        if ((reply.statusCode >= 200 && reply.statusCode < 300) || reply.statusCode === 304) {
           reply.header('Cache-control', value)
         } else {
           reply.header('Cache-control', 'no-store')

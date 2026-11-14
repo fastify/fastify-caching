@@ -346,6 +346,66 @@ test('does not override a Cache-control header set upstream on error responses',
   t.assert.strictEqual(response.headers['cache-control'], 'private, max-age=10')
 })
 
+test('sets configured Cache-control header on 304 Not Modified responses', async (t) => {
+  t.plan(2)
+
+  const opts = {
+    privacy: plugin.privacy.PRIVATE,
+    expiresIn: 300
+  }
+
+  const fastify = Fastify()
+  await fastify.register(plugin, opts)
+
+  fastify.get('/', (_req, reply) => {
+    reply.code(304).send()
+  })
+
+  await fastify.ready()
+
+  const response = await fastify.inject({
+    method: 'GET',
+    path: '/'
+  })
+  t.assert.strictEqual(response.statusCode, 304)
+  t.assert.strictEqual(response.headers['cache-control'], 'private, max-age=300')
+})
+
+test('sets configured Cache-control header on conditional 304 etag hit responses', async (t) => {
+  t.plan(4)
+
+  const opts = {
+    privacy: plugin.privacy.PUBLIC,
+    expiresIn: 300
+  }
+
+  const fastify = Fastify()
+  await fastify.register(plugin, opts)
+
+  fastify.get('/', (_req, reply) => {
+    reply.etag('123456').send({ hello: 'world' })
+  })
+
+  await fastify.ready()
+
+  const first = await fastify.inject({
+    method: 'GET',
+    path: '/'
+  })
+  t.assert.strictEqual(first.statusCode, 200)
+  t.assert.strictEqual(first.headers['cache-control'], 'public, max-age=300')
+
+  const second = await fastify.inject({
+    method: 'GET',
+    path: '/',
+    headers: {
+      'if-none-match': '123456'
+    }
+  })
+  t.assert.strictEqual(second.statusCode, 304)
+  t.assert.strictEqual(second.headers['cache-control'], 'public, max-age=300')
+})
+
 test('sets the expires header', async (t) => {
   t.plan(2)
 
